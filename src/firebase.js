@@ -3,14 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  // ← PASTE YOUR FIREBASE CONFIG OBJECT HERE
-  apiKey: "AIzaSyBibZ87K-sx4nfk4DEJ5ACRj7EJbiuJpTE",
-  authDomain: "jamboree-sat.firebaseapp.com",
-  projectId: "jamboree-sat",
-  storageBucket: "jamboree-sat.firebasestorage.app",
-  messagingSenderId: "491883601678",
-  appId: "1:491883601678:web:543522ba6af313a034c15f",
-  measurementId: "G-GL8WD9LC8Z"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
