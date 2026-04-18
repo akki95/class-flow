@@ -65,16 +65,18 @@ export default function SATTeacherDashboard({ user, chapter, onBack }) {
     setSequence(seq);
   };
 
-  const startSession = async () => {
-    const id = Math.random().toString(36).substr(2, 6).toUpperCase();
-    setSessionId(id);
-    await setDoc(doc(db, "sessions", id), {
-      teacherId: user.uid, currentIndex: 0,
-      status: "active", curriculum: "sat", chapter: chapter.id,
-      createdAt: serverTimestamp(), answers: {}, timerActive: false
-    });
-    setSessionStarted(true);
-  };
+const startSession = async () => {
+  const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+  setSessionId(id);
+  await setDoc(doc(db, "sessions", id), {
+    teacherId: user.uid,
+    teacherEmail: user.email,
+    currentIndex: 0,
+    status: "active", curriculum: "sat", chapter: chapter.id,
+    createdAt: serverTimestamp(), answers: {}, timerActive: false
+  });
+  setSessionStarted(true);
+};
 
   useEffect(() => {
     if (!sessionId) return;
