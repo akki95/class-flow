@@ -4,7 +4,7 @@ import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Login from "./pages/Login";
 import TeacherDashboard from "./pages/TeacherDashboard";
-import StudentView from "./pages/StudentView";
+import SmartStudentView from "./pages/SmartStudentView";
 import IGCSEStudentView from "./pages/IGCSEStudentView";
 import CurriculumPicker from "./pages/CurriculumPicker";
 import IGCSEChapterPicker from "./pages/IGCSEChapterPicker";
@@ -71,7 +71,7 @@ export default function App() {
         <Route path="/" element={user ? <Navigate to="/teacher" /> : <Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/teacher" element={user ? renderTeacherFlow() : <Navigate to="/login" />} />
-        <Route path="/student/:sessionId" element={<StudentView />} />
+        <Route path="/student/:sessionId" element={<SmartStudentView />} /> 
         <Route path="/igcse-student/:sessionId" element={<IGCSEStudentView />} />
       </Routes>
     </Router>

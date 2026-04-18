@@ -150,42 +150,42 @@ function SlideRenderer({ slide, answers, answerKey, hasAnswered, typedAnswer, se
     );
   }
 
-  if (slide.type === "question" || slide.kind === "question") {
-    return (
-      <>
-        <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: "#1e1b4b", color: "#a5b4fc", display: "inline-block", marginBottom: 8 }}>🧩 Question</span>
-        <div style={{ color: "#94a3b8", fontSize: 13, marginBottom: 16 }}>{slide.difficulty} • {slide.marks} marks</div>
-        <div style={{ color: "white", fontSize: 17, lineHeight: 1.8, marginBottom: 20 }}>
-          <MathText text={slide.question} />
+ if (slide.type === "question" || slide.kind === "question") {
+  return (
+    <>
+      <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: "#1e1b4b", color: "#a5b4fc", display: "inline-block", marginBottom: 8 }}>🧩 Question</span>
+      <div style={{ color: "#94a3b8", fontSize: 13, marginBottom: 16 }}>{slide.difficulty} • {slide.marks} marks</div>
+      <div style={{ color: "white", fontSize: 17, lineHeight: 1.8, marginBottom: 20 }}>
+        <MathText text={slide.question} />
+      </div>
+      {slide.parts?.map((part, i) => (
+        <div key={i} style={{ padding: "10px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 8, marginBottom: 8 }}>
+          <span style={{ color: "#6366f1", fontWeight: 700, marginRight: 8 }}>({part.part})</span>
+          <MathText text={part.question} style={{ color: "#cbd5e1" }} />
         </div>
-        {slide.parts?.map((part, i) => (
-          <div key={i} style={{ padding: "10px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 8, marginBottom: 8 }}>
-            <span style={{ color: "#6366f1", fontWeight: 700, marginRight: 8 }}>({part.part})</span>
-            <MathText text={part.question} style={{ color: "#cbd5e1" }} />
-          </div>
-        ))}
-        {!hasAnswered ? (
-          <div style={{ marginTop: 20 }}>
-            <textarea
-              style={{ width: "100%", padding: "14px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.15)", background: "rgba(255,255,255,0.06)", color: "white", fontSize: 15, minHeight: 80, resize: "vertical", boxSizing: "border-box" }}
-              placeholder="Type your answer here..."
-              value={typedAnswer}
-              onChange={e => setTypedAnswer(e.target.value)}
-            />
-            <button onClick={() => onSubmit(answerKey, typedAnswer)}
-              disabled={!typedAnswer.trim()}
-              style={{ width: "100%", padding: "14px", background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "white", border: "none", borderRadius: 12, fontWeight: 700, fontSize: 16, cursor: "pointer", marginTop: 10, opacity: typedAnswer.trim() ? 1 : 0.5 }}>
-              Submit Answer
-            </button>
-          </div>
-        ) : (
-          <div style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 10, padding: 14, color: "#86efac", textAlign: "center", marginTop: 16 }}>
-            ✓ Answer submitted — waiting for teacher's feedback
-          </div>
-        )}
-      </>
-    );
-  }
+      ))}
+      {!hasAnswered ? (
+        <div style={{ marginTop: 20 }}>
+          <textarea
+            style={{ width: "100%", padding: "14px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.15)", background: "rgba(255,255,255,0.06)", color: "white", fontSize: 15, minHeight: 80, resize: "vertical", boxSizing: "border-box" }}
+            placeholder="Type your answer here..."
+            value={typedAnswer}
+            onChange={e => setTypedAnswer(e.target.value)}
+          />
+          <button onClick={() => onSubmit(answerKey, typedAnswer)}
+            disabled={!typedAnswer.trim()}
+            style={{ width: "100%", padding: "14px", background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "white", border: "none", borderRadius: 12, fontWeight: 700, fontSize: 16, cursor: "pointer", marginTop: 10, opacity: typedAnswer.trim() ? 1 : 0.5 }}>
+            Submit Answer
+          </button>
+        </div>
+      ) : (
+        <div style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 10, padding: 14, color: "#86efac", textAlign: "center", marginTop: 16 }}>
+          ✓ Answer submitted — waiting for teacher's feedback
+        </div>
+      )}
+    </>
+  );
+}
 
   return (
     <div style={{ textAlign: "center", padding: "48px 0" }}>

@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import { doc, setDoc, onSnapshot, serverTimestamp, getDoc } from "firebase/firestore";
 import MathText from "../components/MathText";
 import DesmosModal from "../components/DesmosModal";
+import { TeacherTestView } from "../components/TestView";
 
 export default function IGCSETeacherDashboard({ user, chapter, onBack }) {
   const [sessionId, setSessionId] = useState(null);
@@ -368,12 +369,22 @@ export default function IGCSETeacherDashboard({ user, chapter, onBack }) {
     </div>
   );
 }
+ function IGCSETestView({ item, sessionId, sessionData, timerActive, secondsLeft, onStartTimer, onStopTimer, db }) {
+  return (
+    <TeacherTestView
+      item={item}
+      sessionId={sessionId}
+      sessionData={sessionData}
+      timerActive={timerActive}
+      secondsLeft={secondsLeft}
+      onStartTimer={onStartTimer}
+      onStopTimer={onStopTimer}
+      questionField="question"
+      optionFields={["option_a","option_b","option_c","option_d"]}
+      correctField="correct_answer"
+    />
+  );
 
-function IGCSETestView({ item, sessionId, sessionData, timerActive, secondsLeft, onStartTimer, onStopTimer, db }) {
-  const [diagIndex, setDiagIndex] = useState(0);
-  const questions = item.data?.questions || [];
-  const q = questions[diagIndex];
-  if (!q) return null;
 
   const answerKey = `test_${item.id}_${diagIndex}`;
   const studentAnswer = sessionData?.answers?.[answerKey];
@@ -383,56 +394,7 @@ function IGCSETestView({ item, sessionId, sessionData, timerActive, secondsLeft,
     await setDoc(doc(db, "sessions", sessionId), { diagIndex: idx }, { merge: true });
   };
 
-  return (
-    <>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: item.type === "diagnostic" ? "#4c0519" : "#1e1b4b", color: item.type === "diagnostic" ? "#fda4af" : "#a5b4fc" }}>
-          {item.type === "diagnostic" ? "🔍 Diagnostic" : "🏁 Final Assessment"} — Q{diagIndex + 1}/{questions.length}
-        </span>
-        <span style={{ color: "#64748b", fontSize: 13 }}>
-          {q.difficulty} • {q.marks} marks
-        </span>
-      </div>
-      <div style={{ color: "white", fontSize: 17, lineHeight: 1.8, marginBottom: 20 }}>
-        <MathText text={q.question} />
-      </div>
-      {q.parts?.map((part, i) => (
-        <div key={i} style={{ padding: "10px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 8, marginBottom: 8 }}>
-          <span style={{ color: "#6366f1", fontWeight: 700, marginRight: 8 }}>({part.part})</span>
-          <MathText text={part.question} style={{ color: "#cbd5e1" }} />
-          <span style={{ color: "#475569", fontSize: 12, marginLeft: 8 }}>[{part.marks} marks]</span>
-        </div>
-      ))}
-      {studentAnswer && (
-        <div style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.3)", borderRadius: 10, padding: 14, marginTop: 12 }}>
-          <div style={{ color: "#94a3b8", fontSize: 11, marginBottom: 4 }}>Student answered</div>
-          <div style={{ color: "white" }}>{studentAnswer.answer}</div>
-        </div>
-      )}
-      {q.answer && (
-        <div style={{ background: "rgba(34,197,94,0.07)", border: "1px solid rgba(34,197,94,0.2)", borderRadius: 10, padding: 14, marginTop: 12 }}>
-          <div style={{ color: "#94a3b8", fontSize: 11, fontWeight: 700, marginBottom: 6 }}>MODEL ANSWER</div>
-          <MathText text={q.answer} style={{ color: "#cbd5e1", fontSize: 13, lineHeight: 1.7 }} />
-        </div>
-      )}
-      <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-        <button onClick={() => pushDiagIndex(Math.max(0, diagIndex - 1))}
-          disabled={diagIndex === 0}
-          style={{ padding: "10px 22px", background: "#1e293b", color: "white", border: "1px solid #334155", borderRadius: 8, cursor: "pointer", opacity: diagIndex === 0 ? 0.4 : 1 }}>← Prev</button>
-        {!timerActive
-          ? <button onClick={() => onStartTimer(q.timeLimit || 180)}
-              style={{ padding: "10px 22px", background: "#4f46e5", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>⏱ Start Timer</button>
-          : <div style={{ background: "#7c3aed", color: "white", padding: "10px 20px", borderRadius: 8, fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center" }}>
-              ⏱ {secondsLeft}s
-              <button onClick={onStopTimer} style={{ marginLeft: 8, background: "none", border: "none", color: "#f87171", cursor: "pointer" }}>■</button>
-            </div>
-        }
-        <button onClick={() => pushDiagIndex(Math.min(questions.length - 1, diagIndex + 1))}
-          disabled={diagIndex === questions.length - 1}
-          style={{ padding: "10px 22px", background: "#1e293b", color: "white", border: "1px solid #334155", borderRadius: 8, cursor: "pointer", opacity: diagIndex === questions.length - 1 ? 0.4 : 1 }}>Next →</button>
-      </div>
-    </>
-  );
+  
 }
 
 const styles = {
