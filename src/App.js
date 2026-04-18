@@ -11,6 +11,7 @@ import IGCSEChapterPicker from "./pages/IGCSEChapterPicker";
 import IGCSETeacherDashboard from "./pages/IGCSETeacherDashboard";
 import SATChapterPicker from "./pages/SATChapterPicker";
 import SATTeacherDashboard from "./pages/SATTeacherDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -73,6 +74,7 @@ export default function App() {
         <Route path="/teacher" element={user ? renderTeacherFlow() : <Navigate to="/login" />} />
         <Route path="/student/:sessionId" element={<SmartStudentView />} /> 
         <Route path="/igcse-student/:sessionId" element={<IGCSEStudentView />} />
+        <Route path="/admin" element={user ? <AdminDashboard user={user} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
