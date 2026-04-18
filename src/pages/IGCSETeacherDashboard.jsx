@@ -386,14 +386,6 @@ export default function IGCSETeacherDashboard({ user, chapter, onBack }) {
   );
 
 
-  const answerKey = `test_${item.id}_${diagIndex}`;
-  const studentAnswer = sessionData?.answers?.[answerKey];
-
-  const pushDiagIndex = async (idx) => {
-    setDiagIndex(idx);
-    await setDoc(doc(db, "sessions", sessionId), { diagIndex: idx }, { merge: true });
-  };
-
   
 }
 
