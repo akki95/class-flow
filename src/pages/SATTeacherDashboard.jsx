@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
 import { doc, setDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { supabase } from "../supabase";
-import { satCurriculum } from "../data/satCurriculum";
 import MathText from "../components/MathText";
+import DesmosPanel from "../components/DesmosPanel";
+import Whiteboard from "../components/Whiteboard";
 import { TeacherTestView } from "../components/TestView";
+import theoryBaseline from "../data/theory_baseline.json";
 
-export default function SATTeacherDashboard({ user, chapter, onBack }) {
+export default function SATTeacherDashboard({ user, chapter, lesson, onBack }) {
   const [sessionId, setSessionId] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [questions, setQuestions] = useState([]);
@@ -17,6 +19,9 @@ export default function SATTeacherDashboard({ user, chapter, onBack }) {
   const [timerActive, setTimerActive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState({});
+  const [showDesmos, setShowDesmos] = useState(false);
+  const [whiteboardActive, setWhiteboardActive] = useState(false);
+  const [presentationMode, setPresentationMode] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +30,7 @@ export default function SATTeacherDashboard({ user, chapter, onBack }) {
       const { data, error } = await supabase
         .from("questions")
         .select("*")
-        .in("concept", chapter.concepts)
+        .in("concept", lesson.subtopics)
         .order("difficulty", { ascending: true });
       if (error) { console.error(error); setLoading(false); return; }
       setQuestions(data || []);
@@ -33,50 +38,57 @@ export default function SATTeacherDashboard({ user, chapter, onBack }) {
       setLoading(false);
     };
     loadQuestions();
-  }, [chapter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson]);
 
   const buildSequence = (qs) => {
     const seq = [];
     const byDiff = (d) => qs.filter(q => q.difficulty === d);
     const easy = byDiff("easy");
     const medium = byDiff("medium");
-    const hard = byDiff("hard");
 
     const diagQs = [...easy.slice(0, 2), ...medium.slice(0, 2)].slice(0, 4);
     if (diagQs.length > 0) {
-      seq.push({ id: "diagnostic", type: "diagnostic", title: "Diagnostic Test", data: { questions: diagQs, timeLimit: 600 } });
+      seq.push({
+        id: "diagnostic",
+        type: "diagnostic",
+        title: "Diagnostic Test",
+        data: { questions: diagQs, timeLimit: 600 },
+        conceptTitle: lesson.title
+      });
     }
 
-    const byConcept = {};
+    const bySubtopic = {};
     qs.forEach(q => {
-      if (!byConcept[q.concept]) byConcept[q.concept] = [];
-      byConcept[q.concept].push(q);
+      if (!bySubtopic[q.concept]) bySubtopic[q.concept] = [];
+      bySubtopic[q.concept].push(q);
     });
 
-    Object.entries(byConcept).forEach(([concept, cqs]) => {
-      seq.push({ id: `theory_${concept}`, type: "theory", title: concept, content: `This section covers **${concept}**.`, conceptTitle: chapter.title });
-      cqs.slice(0, 3).forEach(q => seq.push({ ...q, type: "question", kind: "question", conceptTitle: concept }));
+    lesson.subtopics.forEach(subtopic => {
+      if (bySubtopic[subtopic]) {
+        const matchingTheory = theoryBaseline.find(t => t.subtopic === subtopic)?.content || `This section covers **${subtopic}**.`;
+        seq.push({ id: `theory_${subtopic}`, type: "theory", title: subtopic, content: matchingTheory, conceptTitle: lesson.title });
+        bySubtopic[subtopic].slice(0, 3).forEach(q => seq.push({ ...q, type: "question", kind: "question", conceptTitle: subtopic }));
+      }
     });
 
-    const finalQs = [...medium.slice(-2), ...hard.slice(-3)].slice(0, 5);
-    if (finalQs.length > 0) {
-      seq.push({ id: "final", type: "final", title: "Final Assessment", data: { questions: finalQs, timeLimit: 600 } });
-    }
+    seq.push({ id: "complete", type: "complete", title: "Session Complete", content: "Great job! The lesson is now complete." });
+
     setSequence(seq);
   };
 
-const startSession = async () => {
-  const id = Math.random().toString(36).substr(2, 6).toUpperCase();
-  setSessionId(id);
-  await setDoc(doc(db, "sessions", id), {
-    teacherId: user.uid,
-    teacherEmail: user.email,
-    currentIndex: 0,
-    status: "active", curriculum: "sat", chapter: chapter.id,
-    createdAt: serverTimestamp(), answers: {}, timerActive: false
-  });
-  setSessionStarted(true);
-};
+  const startSession = async () => {
+    const id = Math.random().toString(36).substr(2, 6).toUpperCase();
+    setSessionId(id);
+    await setDoc(doc(db, "sessions", id), {
+      teacherId: user.uid,
+      teacherEmail: user.email,
+      currentIndex: 0,
+      status: "active", curriculum: "sat", chapter: chapter.id, lesson: lesson.id,
+      createdAt: serverTimestamp(), answers: {}, timerActive: false
+    });
+    setSessionStarted(true);
+  };
 
   useEffect(() => {
     if (!sessionId) return;
@@ -84,18 +96,34 @@ const startSession = async () => {
   }, [sessionId]);
 
   const pushItem = async (index) => {
+    if (index < 0 || index >= sequence.length) return;
     setCurrentIndex(index);
     stopTimer();
     const item = sequence[index];
     const isQ = item?.type === "question";
-    const isTst = item?.type === "diagnostic" || item?.type === "final";
+    const isTst = item?.kind === "diagnostic";
     await setDoc(doc(db, "sessions", sessionId), {
       currentIndex: index, diagIndex: 0, timerActive: false,
       isQuestion: isQ, isTest: isTst,
       currentSlideType: item?.type,
-      currentSlideData: item || null
+      currentSlideData: item || null,
+      whiteboardData: [] // Clear whiteboard on slide change
     }, { merge: true });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!sessionStarted) return;
+      if (e.key === "ArrowRight") {
+        pushItem(currentIndex + 1);
+      } else if (e.key === "ArrowLeft") {
+        pushItem(currentIndex - 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, sequence, sessionStarted]);
 
   const startTimer = async (seconds) => {
     stopTimer();
@@ -114,8 +142,16 @@ const startSession = async () => {
   };
 
   const endSession = async () => {
-    await setDoc(doc(db, "sessions", sessionId), { status: "ended" }, { merge: true });
+    await setDoc(doc(db, "sessions", sessionId), { status: "ended", endedAt: serverTimestamp() }, { merge: true });
     onBack();
+  };
+
+  const saveNotes = async () => {
+    if (!sessionId || !sessionData) return;
+    const currentNotes = sessionData.savedNotes || {};
+    currentNotes[`slide_${currentIndex}`] = sessionData.whiteboardData || [];
+    await setDoc(doc(db, "sessions", sessionId), { savedNotes: currentNotes }, { merge: true });
+    alert("Notes saved for this slide!");
   };
 
   // Group sequence for sidebar
@@ -123,12 +159,8 @@ const startSession = async () => {
     const groups = [];
     let current = null;
     sequence.forEach((item, idx) => {
-      if (item.type === "diagnostic") {
-        groups.push({ label: "Diagnostic Test", type: "diagnostic", items: [{ ...item, idx }] });
-      } else if (item.type === "final") {
-        groups.push({ label: "Final Assessment", type: "final", items: [{ ...item, idx }] });
-      } else if (item.type === "theory") {
-        current = { label: item.title, type: "concept", items: [{ ...item, idx }] };
+      if (item.type === "theory" || item.type === "complete") {
+        current = { label: item.title, type: item.id === "diagnostic_intro" ? "diagnostic" : "concept", items: [{ ...item, idx }] };
         groups.push(current);
       } else if (item.type === "question" && current) {
         current.items.push({ ...item, idx });
@@ -160,8 +192,8 @@ const startSession = async () => {
           </div>
         </div>
         <div style={{ background: "#f8fafc", borderRadius: 12, padding: "20px 24px", marginBottom: 24 }}>
-          <div style={{ fontSize: 22, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{chapter.title}</div>
-          <div style={{ color: "#64748b", fontSize: 14 }}>{chapter.section === "math" ? "📐 SAT Math" : "📖 SAT Verbal"} • {questions.length} questions loaded</div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{lesson.title}</div>
+          <div style={{ color: "#64748b", fontSize: 14 }}>{chapter.title} ({chapter.section === "math" ? "📐 Math" : "📖 Verbal"}) • {questions.length} questions loaded</div>
           <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
             {["easy", "medium", "hard"].map(d => {
               const count = questions.filter(q => q.difficulty === d).length;
@@ -225,6 +257,7 @@ const startSession = async () => {
 
       <div style={ls.body}>
         {/* Sidebar */}
+        {!presentationMode && (
         <div style={ls.sidebar}>
           <div style={{ padding: "16px 16px 8px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1 }}>
             Session Plan
@@ -290,10 +323,31 @@ const startSession = async () => {
             })}
           </div>
         </div>
+        )}
 
         {/* Main content */}
         <div style={ls.main}>
-          <div style={ls.contentWrap}>
+          {/* Teacher Toolbar */}
+          <div style={{ position: "absolute", top: 20, right: 20, display: "flex", gap: 10, zIndex: 10 }}>
+            <button onClick={() => setPresentationMode(!presentationMode)} style={{ ...ls.toolbarBtn, background: presentationMode ? "#4f46e5" : "white", color: presentationMode ? "white" : "#0f172a" }}>
+              {presentationMode ? "🖥️ Exit Presentation" : "🖥️ Presentation"}
+            </button>
+            <button onClick={() => setShowDesmos(!showDesmos)} style={{ ...ls.toolbarBtn, background: showDesmos ? "#4f46e5" : "white", color: showDesmos ? "white" : "#0f172a" }}>
+              📐 Desmos
+            </button>
+            <button onClick={() => setWhiteboardActive(!whiteboardActive)} style={{ ...ls.toolbarBtn, background: whiteboardActive ? "#6366f1" : "white", color: whiteboardActive ? "white" : "#0f172a", border: whiteboardActive ? "1px solid #6366f1" : "1px solid #e2e8f0" }}>
+              ✏️ {whiteboardActive ? "Close Whiteboard" : "Whiteboard"}
+            </button>
+            {whiteboardActive && (
+              <button onClick={saveNotes} style={{ ...ls.toolbarBtn, background: "#10b981", color: "white", border: "1px solid #10b981" }}>
+                💾 Save Notes
+              </button>
+            )}
+          </div>
+
+          <Whiteboard sessionId={sessionId} isActive={whiteboardActive} />
+
+          <div style={{ ...ls.contentWrap, maxWidth: presentationMode ? 1200 : 800 }}>
 
             {/* Breadcrumb */}
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 20, fontSize: 12, color: "#94a3b8" }}>
@@ -307,6 +361,7 @@ const startSession = async () => {
 
             {/* Content card */}
             <div style={ls.card}>
+
               {/* Test */}
               {isTest && (
                 <TeacherTestView
@@ -324,12 +379,14 @@ const startSession = async () => {
               )}
 
               {/* Theory */}
-              {item.type === "theory" && (
+              {(item.type === "theory" || item.type === "complete") && (
                 <>
-                  <div style={ls.slideTypeBadge("#dcfce7", "#166534")}>📖 Topic Introduction</div>
+                  <div style={ls.slideTypeBadge(item.type === "complete" ? "#fef08a" : "#dcfce7", item.type === "complete" ? "#854d0e" : "#166534")}>
+                    {item.type === "complete" ? "🏁 Session Complete" : "📖 Topic Introduction"}
+                  </div>
                   <h1 style={ls.slideTitle}>{item.title}</h1>
                   <p style={{ color: "#64748b", lineHeight: 1.8, fontSize: 15 }}>
-                    Work through the questions in this section with your student. Use the sidebar to navigate to specific questions.
+                    {item.content}
                   </p>
                 </>
               )}
@@ -338,7 +395,9 @@ const startSession = async () => {
               {isQuestion && (
                 <>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-                    <div style={ls.slideTypeBadge("#f0f0ff", "#4f46e5")}>🧩 Practice Question</div>
+                    <div style={ls.slideTypeBadge(item.kind === "diagnostic" ? "#fbcfe8" : "#f0f0ff", item.kind === "diagnostic" ? "#9d174d" : "#4f46e5")}>
+                      {item.kind === "diagnostic" ? `🔍 Diagnostic Question (${item.testIndex}/${item.totalTestQuestions})` : "🧩 Practice Question"}
+                    </div>
                     <div style={{ display: "flex", gap: 8 }}>
                       {item.trap_type && (
                         <span style={{ background: "#fef9c3", color: "#854d0e", padding: "3px 10px", borderRadius: 12, fontSize: 12 }}>
@@ -346,12 +405,12 @@ const startSession = async () => {
                         </span>
                       )}
                       <span style={{ background: "#f1f5f9", color: "#64748b", padding: "3px 10px", borderRadius: 12, fontSize: 12 }}>
-                        {item.ideal_time_seconds}s suggested
+                        {item.ideal_time_seconds || 90}s suggested
                       </span>
                     </div>
                   </div>
                   <div style={{ fontSize: 17, color: "#0f172a", lineHeight: 1.8, marginBottom: 24 }}>
-                    <MathText text={item.question_text} />
+                    <MathText text={item.question_text || item.question} />
                   </div>
                   {/* Options */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -379,30 +438,32 @@ const startSession = async () => {
               )}
 
               {/* Navigation */}
-              {!isTest && (
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 28, paddingTop: 20, borderTop: "1px solid #f1f5f9" }}>
-                  <button onClick={() => pushItem(Math.max(0, currentIndex - 1))}
-                    disabled={currentIndex === 0}
-                    style={{ ...ls.navBtn, opacity: currentIndex === 0 ? 0.4 : 1 }}>← Previous</button>
-                  <div style={{ flex: 1 }} />
-                  {isQuestion && (
-                    !timerActive
-                      ? <button onClick={() => startTimer(item.ideal_time_seconds || 90)} style={ls.timerBtn}>⏱ Start Timer</button>
-                      : <div style={ls.timerRunning}>
-                          <span>⏱ {secondsLeft}s</span>
-                          <button onClick={stopTimer} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13, marginLeft: 8 }}>Stop</button>
-                        </div>
-                  )}
-                  <button onClick={() => pushItem(Math.min(sequence.length - 1, currentIndex + 1))}
-                    disabled={currentIndex === sequence.length - 1}
-                    style={{ ...ls.nextBtn, opacity: currentIndex === sequence.length - 1 ? 0.4 : 1 }}>Next →</button>
-                </div>
-              )}
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 28, paddingTop: 20, borderTop: "1px solid #f1f5f9" }}>
+                <button onClick={() => pushItem(Math.max(0, currentIndex - 1))}
+                  disabled={currentIndex === 0}
+                  style={{ ...ls.navBtn, opacity: currentIndex === 0 ? 0.4 : 1 }}>← Previous</button>
+                <div style={{ flex: 1 }} />
+                {isQuestion && (
+                  !timerActive
+                    ? <button onClick={() => startTimer(item.ideal_time_seconds || 90)} style={ls.timerBtn}>⏱ Start Timer</button>
+                    : <div style={ls.timerRunning}>
+                        <span>⏱ {secondsLeft}s</span>
+                        <button onClick={stopTimer} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13, marginLeft: 8 }}>Stop</button>
+                      </div>
+                )}
+                <button onClick={() => pushItem(Math.min(sequence.length - 1, currentIndex + 1))}
+                  disabled={currentIndex === sequence.length - 1}
+                  style={{ ...ls.nextBtn, opacity: currentIndex === sequence.length - 1 ? 0.4 : 1 }}>Next →</button>
+              </div>
             </div>
           </div>
         </div>
 
+        {/* Desmos Side Panel */}
+        <DesmosPanel isOpen={showDesmos} onClose={() => setShowDesmos(false)} />
+
         {/* Right panel */}
+        {!presentationMode && (
         <div style={ls.rightPanel}>
           {/* Student status */}
           <div style={ls.rightSection}>
@@ -464,25 +525,9 @@ const startSession = async () => {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
-  );
-}
-
-function SATTestView({ item, sessionId, sessionData, timerActive, secondsLeft, onStartTimer, onStopTimer, db }) {
-  return (
-    <TeacherTestView
-      item={item}
-      sessionId={sessionId}
-      sessionData={sessionData}
-      timerActive={timerActive}
-      secondsLeft={secondsLeft}
-      onStartTimer={onStartTimer}
-      onStopTimer={onStopTimer}
-      questionField="question_text"
-      optionFields={["option_a","option_b","option_c","option_d"]}
-      correctField="correct_answer"
-    />
   );
 }
 
@@ -499,18 +544,19 @@ const ls = {
   timerChip: { padding: "6px 14px", borderRadius: 8, border: "1.5px solid", fontWeight: 700, fontSize: 16, background: "white" },
   endBtn: { padding: "7px 16px", background: "#fef2f2", color: "#ef4444", border: "1px solid #fecaca", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 13 },
   body: { display: "flex", flex: 1, overflow: "hidden", height: "calc(100vh - 57px)" },
-  sidebar: { width: 260, background: "white", borderRight: "1px solid #f1f5f9", display: "flex", flexDirection: "column", flexShrink: 0 },
-  main: { flex: 1, overflowY: "auto", padding: "28px 32px", background: "#f8fafc" },
-  contentWrap: { maxWidth: 760, margin: "0 auto" },
-  card: { background: "white", borderRadius: 16, padding: 32, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", border: "1px solid #f1f5f9" },
-  slideTitle: { fontSize: 24, fontWeight: 700, color: "#0f172a", margin: "12px 0 16px" },
-  slideTypeBadge: (bg, color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: bg, color }),
-  navBtn: { padding: "9px 20px", background: "white", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 500 },
-  nextBtn: { padding: "9px 20px", background: "#6366f1", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 },
-  timerBtn: { padding: "9px 20px", background: "#f5f3ff", color: "#6366f1", border: "1px solid #e0e7ff", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 14 },
-  timerRunning: { display: "flex", alignItems: "center", padding: "9px 16px", background: "#f5f3ff", color: "#6366f1", borderRadius: 8, fontWeight: 700, fontSize: 15, border: "1px solid #e0e7ff" },
-  rightPanel: { width: 260, background: "white", borderLeft: "1px solid #f1f5f9", padding: 20, overflowY: "auto", flexShrink: 0, display: "flex", flexDirection: "column", gap: 20 },
-  rightSection: { display: "flex", flexDirection: "column", gap: 8 },
-  rightLabel: { fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1 },
-  statRow: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#f8fafc", borderRadius: 8 },
+  sidebar: { width: 280, background: "white", borderRight: "1px solid #f1f5f9", display: "flex", flexDirection: "column" },
+  main: { flex: 1, overflowY: "auto", position: "relative" },
+  contentWrap: { maxWidth: 800, margin: "0 auto", padding: "40px" },
+  card: { background: "white", borderRadius: 16, padding: "40px", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03)", border: "1px solid #f1f5f9" },
+  rightPanel: { width: 300, background: "white", borderLeft: "1px solid #f1f5f9", padding: "20px" },
+  rightSection: { marginBottom: 32 },
+  rightLabel: { fontSize: 12, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 },
+  statRow: { display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid #f8fafc" },
+  navBtn: { padding: "10px 16px", background: "#f8fafc", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer" },
+  nextBtn: { padding: "10px 20px", background: "#6366f1", color: "white", border: "none", borderRadius: 8, fontWeight: 600, cursor: "pointer", boxShadow: "0 2px 4px rgba(99,102,241,0.2)" },
+  timerBtn: { padding: "10px 16px", background: "#fef2f2", color: "#ef4444", border: "1px solid #fecaca", borderRadius: 8, fontWeight: 600, cursor: "pointer" },
+  timerRunning: { display: "flex", alignItems: "center", background: "#fee2e2", color: "#ef4444", padding: "8px 16px", borderRadius: 8, fontWeight: 700 },
+  toolbarBtn: { padding: "8px 16px", background: "white", color: "#0f172a", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 14, boxShadow: "0 1px 2px rgba(0,0,0,0.05)", display: "flex", alignItems: "center", gap: 6 },
+  slideTypeBadge: (bg, color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: bg, color: color, marginBottom: 16 }),
+  slideTitle: { fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 16 }
 };

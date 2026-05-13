@@ -6,16 +6,34 @@ export const satCurriculum = {
       title: "Algebra",
       icon: "📐",
       section: "math",
-      concepts: [
-        "Solving linear equations and inequalities",
-        "Linear equation word problems",
-        "Linear inequality word problems",
-        "Solving systems of linear equations",
-        "System of linear equations word problems",
-        "Graphs of linear equations and functions",
-        "Graphs of linear systems and inequalities",
-        "Linear relationship word problems",
-        "Isolating quantities"
+      lessons: [
+        {
+          id: "alg_linear_eq",
+          title: "Linear Equations & Inequalities",
+          subtopics: [
+            "Solving linear equations and inequalities",
+            "Linear equation word problems",
+            "Linear inequality word problems"
+          ]
+        },
+        {
+          id: "alg_systems",
+          title: "Systems of Linear Equations",
+          subtopics: [
+            "Solving systems of linear equations",
+            "System of linear equations word problems"
+          ]
+        },
+        {
+          id: "alg_graphs",
+          title: "Graphing Linear Equations",
+          subtopics: [
+            "Graphs of linear equations and functions",
+            "Graphs of linear systems and inequalities",
+            "Linear relationship word problems",
+            "Isolating quantities"
+          ]
+        }
       ]
     },
     {
@@ -23,20 +41,44 @@ export const satCurriculum = {
       title: "Advanced Math",
       icon: "🔢",
       section: "math",
-      concepts: [
-        "Solving quadratic equations",
-        "Factoring quadratic and polynomial expressions",
-        "Quadratic and exponential word problems",
-        "Quadratic graphs",
-        "Operations with polynomials",
-        "Polynomial and other nonlinear graphs",
-        "Nonlinear functions",
-        "Linear and quadratic systems",
-        "Radical, rational, and absolute value equations",
-        "Radicals and rational exponents",
-        "Operations with rational expressions",
-        "Exponential graphs",
-        "Linear and exponential growth"
+      lessons: [
+        {
+          id: "adv_quadratics",
+          title: "Quadratics",
+          subtopics: [
+            "Solving quadratic equations",
+            "Factoring quadratic and polynomial expressions",
+            "Quadratic and exponential word problems",
+            "Quadratic graphs"
+          ]
+        },
+        {
+          id: "adv_polynomials",
+          title: "Polynomials & Non-linear Graphs",
+          subtopics: [
+            "Operations with polynomials",
+            "Polynomial and other nonlinear graphs",
+            "Nonlinear functions",
+            "Linear and quadratic systems"
+          ]
+        },
+        {
+          id: "adv_radicals",
+          title: "Radicals & Rationals",
+          subtopics: [
+            "Radical, rational, and absolute value equations",
+            "Radicals and rational exponents",
+            "Operations with rational expressions"
+          ]
+        },
+        {
+          id: "adv_exponentials",
+          title: "Exponentials",
+          subtopics: [
+            "Exponential graphs",
+            "Linear and exponential growth"
+          ]
+        }
       ]
     },
     {
@@ -44,16 +86,34 @@ export const satCurriculum = {
       title: "Problem Solving & Data",
       icon: "📊",
       section: "math",
-      concepts: [
-        "Ratios, rates, and proportions",
-        "Percentages",
-        "Unit conversion",
-        "Data inferences",
-        "Evaluating statistical claims",
-        "Probability and relative frequency",
-        "Center, spread, and shape of distributions",
-        "Data representations",
-        "Scatterplots"
+      lessons: [
+        {
+          id: "ps_ratios",
+          title: "Ratios & Proportions",
+          subtopics: [
+            "Ratios, rates, and proportions",
+            "Percentages",
+            "Unit conversion"
+          ]
+        },
+        {
+          id: "ps_data",
+          title: "Data Interpretation",
+          subtopics: [
+            "Data inferences",
+            "Evaluating statistical claims",
+            "Probability and relative frequency"
+          ]
+        },
+        {
+          id: "ps_stats",
+          title: "Statistics",
+          subtopics: [
+            "Center, spread, and shape of distributions",
+            "Data representations",
+            "Scatterplots"
+          ]
+        }
       ]
     },
     {
@@ -61,13 +121,31 @@ export const satCurriculum = {
       title: "Geometry & Trigonometry",
       icon: "📏",
       section: "math",
-      concepts: [
-        "Area and volume",
-        "Circle equations",
-        "Circle theorems",
-        "Congruence, similarity, and angle relationships",
-        "Right triangle trigonometry",
-        "Unit circle trigonometry"
+      lessons: [
+        {
+          id: "geo_shapes",
+          title: "Shapes & Area",
+          subtopics: [
+            "Area and volume",
+            "Congruence, similarity, and angle relationships"
+          ]
+        },
+        {
+          id: "geo_circles",
+          title: "Circles",
+          subtopics: [
+            "Circle equations",
+            "Circle theorems"
+          ]
+        },
+        {
+          id: "geo_trig",
+          title: "Trigonometry",
+          subtopics: [
+            "Right triangle trigonometry",
+            "Unit circle trigonometry"
+          ]
+        }
       ]
     },
     {
@@ -75,10 +153,22 @@ export const satCurriculum = {
       title: "Craft & Structure",
       icon: "📝",
       section: "verbal",
-      concepts: [
-        "Words in Context",
-        "Text Structure and Purpose",
-        "Cross-Text Connections"
+      lessons: [
+        {
+          id: "vc_words",
+          title: "Words & Context",
+          subtopics: [
+            "Words in Context"
+          ]
+        },
+        {
+          id: "vc_structure",
+          title: "Text Structure",
+          subtopics: [
+            "Text Structure and Purpose",
+            "Cross-Text Connections"
+          ]
+        }
       ]
     },
     {
@@ -86,9 +176,15 @@ export const satCurriculum = {
       title: "Expression of Ideas",
       icon: "✍️",
       section: "verbal",
-      concepts: [
-        "Rhetorical Synthesis",
-        "Transitions"
+      lessons: [
+        {
+          id: "ve_ideas",
+          title: "Idea Expression",
+          subtopics: [
+            "Rhetorical Synthesis",
+            "Transitions"
+          ]
+        }
       ]
     },
     {
@@ -96,9 +192,21 @@ export const satCurriculum = {
       title: "Standard English Conventions",
       icon: "📖",
       section: "verbal",
-      concepts: [
-        "Boundaries",
-        "Form, Structure, and Sense"
+      lessons: [
+        {
+          id: "vcon_boundaries",
+          title: "Sentence Boundaries",
+          subtopics: [
+            "Boundaries"
+          ]
+        },
+        {
+          id: "vcon_form",
+          title: "Form & Sense",
+          subtopics: [
+            "Form, Structure, and Sense"
+          ]
+        }
       ]
     },
     {
@@ -106,11 +214,23 @@ export const satCurriculum = {
       title: "Information & Ideas",
       icon: "💡",
       section: "verbal",
-      concepts: [
-        "Command of Evidence (Textual)",
-        "Command of Evidence (Quantitative)",
-        "Inferences",
-        "Central Ideas and Details"
+      lessons: [
+        {
+          id: "vi_evidence",
+          title: "Evidence Command",
+          subtopics: [
+            "Command of Evidence (Textual)",
+            "Command of Evidence (Quantitative)"
+          ]
+        },
+        {
+          id: "vi_inferences",
+          title: "Inferences & Ideas",
+          subtopics: [
+            "Inferences",
+            "Central Ideas and Details"
+          ]
+        }
       ]
     }
   ]

@@ -8,7 +8,6 @@ import DesmosModal from "../components/DesmosModal";
 export default function IGCSEStudentView() {
   const { sessionId } = useParams();
   const [session, setSession] = useState(null);
-  const [sessionContent, setSessionContent] = useState(null);
   const [answers, setAnswers] = useState({});
   const [typedAnswer, setTypedAnswer] = useState("");
   const [secondsLeft, setSecondsLeft] = useState(0);
@@ -59,11 +58,6 @@ export default function IGCSEStudentView() {
   // Session data contains currentIndex and the teacher pushes content
   // For IGCSE student view, teacher controls what's shown via Firestore
   const timerPct = session.timeLimit ? (secondsLeft / session.timeLimit) * 100 : 0;
-  const currentSlide = session.currentSlide || null;
-  const slideType = currentSlide?.type || session.currentSlideType || "waiting";
-  const isQuestion = slideType === "question" || session.isQuestion;
-  const isTest = slideType === "diagnostic" || slideType === "final" || session.isTest;
-  const showDesmosBtn = isQuestion || isTest || session.showDesmos;
   const answerKey = `slide_${session.currentIndex}`;
   const hasAnswered = !!answers[answerKey];
 

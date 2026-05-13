@@ -19,7 +19,6 @@ const sequence = buildSequence();
 
 function DesmosPanel({ isOpen }) {
   const [loaded, setLoaded] = useState(false);
-  const containerRef = useState(null);
 
   useEffect(() => {
     if (!isOpen || loaded) return;
@@ -42,6 +41,7 @@ function DesmosPanel({ isOpen }) {
       s.onload = init;
       document.head.appendChild(s);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   if (!isOpen) return null;

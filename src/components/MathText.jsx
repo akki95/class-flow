@@ -47,7 +47,7 @@ function fixLatex(str) {
     .replace(/(?<!\\)\bmathbf\b/g, '\\mathbf')
     .replace(/(?<!\\)\bbegin\b/g, '\\begin')
     .replace(/(?<!\\)\bend\b(?=\s*\{)/g, '\\end')
-    .replace(/(?<!\\)\bleft\b(?=\s*[\[(|])/g, '\\left')
+    .replace(/(?<!\\)\bleft\b(?=\s*[[(|])/g, '\\left')
     .replace(/(?<!\\)\bright\b(?=\s*[\])|])/g, '\\right')
     .replace(/(?<!\\)\bdfrac\b/g, '\\dfrac')
     .replace(/(?<!\\)\btfrac\b/g, '\\tfrac')

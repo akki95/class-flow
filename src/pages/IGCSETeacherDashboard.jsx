@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
 import { doc, setDoc, onSnapshot, serverTimestamp, getDoc } from "firebase/firestore";
 import MathText from "../components/MathText";
-import DesmosModal from "../components/DesmosModal";
+import DesmosPanel from "../components/DesmosPanel";
 import { TeacherTestView } from "../components/TestView";
 
 export default function IGCSETeacherDashboard({ user, chapter, onBack }) {
@@ -14,6 +14,7 @@ export default function IGCSETeacherDashboard({ user, chapter, onBack }) {
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const [showDesmos, setShowDesmos] = useState(false);
+  const [presentationMode, setPresentationMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef(null);
 
@@ -224,7 +225,10 @@ const startSession = async () => {
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <div style={styles.sessionBadge}>Session: <strong style={{ color: "#818cf8" }}>{sessionId}</strong></div>
-          {showDesmosBtn && <button onClick={() => setShowDesmos(true)} style={styles.desmosBtn}>📐 Desmos</button>}
+          <button onClick={() => setPresentationMode(!presentationMode)} style={{ ...styles.desmosBtn, background: presentationMode ? "#3b82f6" : "#1e3a5f" }}>
+            {presentationMode ? "🖥️ Exit Presentation" : "🖥️ Presentation"}
+          </button>
+          {showDesmosBtn && <button onClick={() => setShowDesmos(!showDesmos)} style={{ ...styles.desmosBtn, background: showDesmos ? "#3b82f6" : "#1e3a5f" }}>📐 Desmos</button>}
           <button onClick={endSession} style={styles.endBtn}>End Session</button>
         </div>
       </div>
@@ -236,6 +240,7 @@ const startSession = async () => {
 
       <div style={styles.body}>
         {/* Sidebar */}
+        {!presentationMode && (
         <div style={styles.sidebar}>
           <div style={{ color: "#475569", fontSize: 11, fontWeight: 700, marginBottom: 12, textTransform: "uppercase", letterSpacing: 1 }}>Session Content</div>
           {sequence.map((s, i) => {
@@ -255,6 +260,7 @@ const startSession = async () => {
             );
           })}
         </div>
+        )}
 
         {/* Main */}
         <div style={styles.main}>
@@ -344,7 +350,11 @@ const startSession = async () => {
           </div>
         </div>
 
+        {/* Desmos Side Panel */}
+        <DesmosPanel isOpen={showDesmos} onClose={() => setShowDesmos(false)} />
+
         {/* Right panel */}
+        {!presentationMode && (
         <div style={styles.rightPanel}>
           <div style={{ color: "#475569", fontSize: 11, fontWeight: 700, marginBottom: 16, textTransform: "uppercase" }}>Student Activity</div>
           <div style={styles.studentStatus}>
@@ -364,9 +374,9 @@ const startSession = async () => {
             </div>
           )}
         </div>
+        )}
       </div>
 
-      <DesmosModal isOpen={showDesmos} onClose={() => setShowDesmos(false)} />
     </div>
   );
 }

@@ -1,8 +1,40 @@
+import { useState } from "react";
 import { satCurriculum } from "../data/satCurriculum";
 
 export default function SATChapterPicker({ onSelect, onBack }) {
+  const [selectedChapter, setSelectedChapter] = useState(null);
+
   const mathChapters = satCurriculum.chapters.filter(c => c.section === "math");
   const verbalChapters = satCurriculum.chapters.filter(c => c.section === "verbal");
+
+  if (selectedChapter) {
+    return (
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <div style={styles.header}>
+            <button onClick={() => setSelectedChapter(null)} style={styles.backBtn}>← Back to Chapters</button>
+            <div style={styles.logoRow}>
+              <div style={styles.logoIcon}>CF</div>
+              <div style={styles.logoName}>ClassFlow</div>
+            </div>
+          </div>
+
+          <h2 style={styles.heading}>{selectedChapter.title} Lessons</h2>
+          <p style={styles.sub}>Select a lesson to begin the session</p>
+
+          <div style={styles.grid}>
+            {selectedChapter.lessons.map(lesson => (
+              <button key={lesson.id} onClick={() => onSelect(lesson, selectedChapter)} style={styles.chapterCard}>
+                <div style={styles.chapterIcon}>{selectedChapter.icon}</div>
+                <div style={styles.chapterTitle}>{lesson.title}</div>
+                <div style={styles.chapterMeta}>{lesson.subtopics.length} subtopics</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.container}>
@@ -16,16 +48,16 @@ export default function SATChapterPicker({ onSelect, onBack }) {
         </div>
 
         <h2 style={styles.heading}>SAT Preparation</h2>
-        <p style={styles.sub}>Select a topic to begin the session</p>
+        <p style={styles.sub}>Select a topic to view its lessons</p>
 
         <div style={styles.section}>
           <div style={styles.sectionLabel}>📐 Math</div>
           <div style={styles.grid}>
             {mathChapters.map(chapter => (
-              <button key={chapter.id} onClick={() => onSelect(chapter)} style={styles.chapterCard}>
+              <button key={chapter.id} onClick={() => setSelectedChapter(chapter)} style={styles.chapterCard}>
                 <div style={styles.chapterIcon}>{chapter.icon}</div>
                 <div style={styles.chapterTitle}>{chapter.title}</div>
-                <div style={styles.chapterMeta}>{chapter.concepts.length} topics</div>
+                <div style={styles.chapterMeta}>{chapter.lessons.length} lessons</div>
               </button>
             ))}
           </div>
@@ -35,10 +67,10 @@ export default function SATChapterPicker({ onSelect, onBack }) {
           <div style={styles.sectionLabel}>📖 Verbal</div>
           <div style={styles.grid}>
             {verbalChapters.map(chapter => (
-              <button key={chapter.id} onClick={() => onSelect(chapter)} style={styles.chapterCard}>
+              <button key={chapter.id} onClick={() => setSelectedChapter(chapter)} style={styles.chapterCard}>
                 <div style={styles.chapterIcon}>{chapter.icon}</div>
                 <div style={styles.chapterTitle}>{chapter.title}</div>
-                <div style={styles.chapterMeta}>{chapter.concepts.length} topics</div>
+                <div style={styles.chapterMeta}>{chapter.lessons.length} lessons</div>
               </button>
             ))}
           </div>

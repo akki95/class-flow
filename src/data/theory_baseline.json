@@ -1,0 +1,9 @@
+[
+  {
+    "chapter_id": "sat_algebra",
+    "lesson_id": "alg_linear_eq",
+    "topic": "Linear Equations & Inequalities",
+    "subtopic": "Solving linear equations and inequalities",
+    "content": "### Solving Linear Equations\n\nA linear equation is an algebraic equation in which each term is either a constant or the product of a constant and a single variable. The highest power of the variable is always 1.\n\n**Core Concepts:**\n- The standard form of a linear equation is $Ax + By = C$.\n- The slope-intercept form is $y = mx + b$, where $m$ is the slope and $b$ is the y-intercept.\n\n**Example 1:**\nSolve for $x$: $3x + 5 = 2x - 4$\n\n*Step 1:* Subtract $2x$ from both sides.\n$x + 5 = -4$\n\n*Step 2:* Subtract 5 from both sides.\n$x = -9$\n\n### Solving Linear Inequalities\n\nLinear inequalities are similar to linear equations, but instead of an equal sign, they use inequality symbols: $<, >, \\le, \\ge$.\n\n**Important Rule:** When you multiply or divide both sides of an inequality by a negative number, you must flip the inequality sign.\n\n**Example 2:**\nSolve for $y$: $-2y + 6 > 10$\n\n*Step 1:* Subtract 6 from both sides.\n$-2y > 4$\n\n*Step 2:* Divide by -2 and flip the sign.\n$y < -2$"
+  }
+]

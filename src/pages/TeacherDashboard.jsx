@@ -3,7 +3,6 @@ import { db, auth } from "../firebase";
 import { doc, setDoc, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { trigonometryChapter } from "../data/trigonometry";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import MathText from "../components/MathText";
 import DesmosModal from "../components/DesmosModal";
 
@@ -29,7 +28,6 @@ export default function TeacherDashboard({ user }) {
   const [showDesmos, setShowDesmos] = useState(false);
   const [diagIndex, setDiagIndex] = useState(0);
   const intervalRef = useRef(null);
-  const navigate = useNavigate();
   const item = sequence[currentIndex];
   const isDiagnostic = item?.type === "diagnostic";
   const isFinal = item?.type === "final";

@@ -4,6 +4,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
 const ADMIN_EMAIL = "akash95agrawal@gmail.com";
+const TEST_ADMIN_EMAIL = "admin@classflow.com";
 
 export default function AdminDashboard({ user }) {
   const [sessions, setSessions] = useState([]);
@@ -21,7 +22,7 @@ export default function AdminDashboard({ user }) {
     load();
   }, []);
 
-  if (user?.email !== ADMIN_EMAIL) {
+  if (user?.email !== ADMIN_EMAIL && user?.email !== TEST_ADMIN_EMAIL) {
     return (
       <div style={s.center}>
         <div style={{ color: "#ef4444", fontSize: 18, fontWeight: 600 }}>Access Denied</div>
@@ -68,10 +69,16 @@ export default function AdminDashboard({ user }) {
             <div style={{ fontSize: 12, color: "#94a3b8" }}>Usage Analytics</div>
           </div>
         </div>
-        <button onClick={() => signOut(auth)}
-          style={{ padding: "7px 16px", background: "#fef2f2", color: "#ef4444", border: "1px solid #fecaca", borderRadius: 8, cursor: "pointer", fontSize: 13 }}>
-          Sign Out
-        </button>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={() => window.location.href = "/admin/theory"}
+            style={{ padding: "7px 16px", background: "#f0fdf4", color: "#166534", border: "1px solid #bbf7d0", borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            📚 AI Theory Curation
+          </button>
+          <button onClick={() => signOut(auth)}
+            style={{ padding: "7px 16px", background: "#fef2f2", color: "#ef4444", border: "1px solid #fecaca", borderRadius: 8, cursor: "pointer", fontSize: 13 }}>
+            Sign Out
+          </button>
+        </div>
       </div>
 
       <div style={s.body}>

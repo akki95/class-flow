@@ -3,9 +3,11 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function CurriculumPicker({ user, onSelect }) {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelect = async (curriculum) => {
     if (curriculum === "igcse") {
@@ -46,13 +48,12 @@ export default function CurriculumPicker({ user, onSelect }) {
             <div style={styles.optionDesc}>Digital SAT • Geometry & Algebra • Trigonometry</div>
             <div style={styles.optionMeta}>Math + Verbal • 8 chapters • From Supabase</div>
           </button>
-
-          <button onClick={() => handleSelect("igcse")} style={styles.optionCard} disabled={loading}>
-            <div style={styles.optionIcon}>📊</div>
-            <div style={styles.optionTitle}>AS Level Maths</div>
-            <div style={styles.optionDesc}>Edexcel AS • Pure Mathematics • Statistics • Mechanics</div>
-            <div style={styles.optionMeta}>11 chapters • From Firestore</div>
-            {loading && <div style={styles.loadingBadge}>Loading chapters...</div>}
+          
+          <button onClick={() => navigate("/homework")} style={{ ...styles.optionCard, background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }} disabled={loading}>
+            <div style={styles.optionIcon}>📝</div>
+            <div style={styles.optionTitle}>Manage Homework</div>
+            <div style={styles.optionDesc}>Assign and track async homework assignments</div>
+            <div style={styles.optionMeta}>Independent of live sessions</div>
           </button>
         </div>
 

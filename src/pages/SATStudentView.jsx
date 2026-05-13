@@ -4,6 +4,7 @@ import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import MathText from "../components/MathText";
 import { StudentTestView } from "../components/TestView";
+import Whiteboard from "../components/Whiteboard";
 
 function DesmosPanel({ isOpen }) {
   const [loaded, setLoaded] = useState(false);
@@ -136,8 +137,11 @@ export default function SATStudentView() {
       )}
 
       <div style={{ display: "flex", flex: 1, overflow: "hidden", height: "calc(100vh - 57px)" }}>
-        <div style={{ flex: 1, overflowY: "auto", padding: "32px 24px", display: "flex", justifyContent: showDesmos ? "flex-start" : "center" }}>
-          <div style={{ ...styles.card, maxWidth: showDesmos ? "100%" : 720, width: "100%" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "32px 24px", display: "flex", justifyContent: showDesmos ? "flex-start" : "center", position: "relative" }}>
+          
+          <Whiteboard sessionId={sessionId} isActive={true} readOnly={true} />
+
+          <div style={{ ...styles.card, maxWidth: showDesmos ? "100%" : 720, width: "100%", zIndex: 1 }}>
 
             {/* Test */}
             {isTest && slide && (
