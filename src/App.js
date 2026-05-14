@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminTheoryDashboard from "./pages/AdminTheoryDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import HomeworkManager from "./pages/HomeworkManager";
+import SequencesFlow from "./pages/SequencesFlow";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -115,6 +116,7 @@ export default function App() {
         <Route path="/igcse-student/:sessionId" element={<IGCSEStudentView />} />
         <Route path="/admin" element={user ? <AdminDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/admin/theory" element={user ? <AdminTheoryDashboard user={user} onBack={() => window.history.back()} /> : <Navigate to="/login" />} />
+        <Route path="/igcse/edexcel/sequences" element={user ? <SequencesFlow /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
