@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { auth, db } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -130,6 +131,7 @@ export default function App() {
         <Route path="/igcse/edexcel/mechanics" element={<><MechanicsHome /><FeedbackWidget userEmail={user?.email} /></>} />
       </Routes>
     </Router>
+    <Analytics />
     </ThemeProvider>
   );
 }
