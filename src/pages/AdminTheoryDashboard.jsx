@@ -4,8 +4,8 @@ import { satCurriculum } from "../data/satCurriculum";
 import initialTheory from "../data/theory_baseline.json";
 
 export default function AdminTheoryDashboard({ user, onBack }) {
-  const [selectedChapter, setSelectedChapter] = useState(null);
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedChapter, setSelectedChapter] = useState(null); // eslint-disable-line no-unused-vars
+  const [selectedLesson, setSelectedLesson] = useState(null); // eslint-disable-line no-unused-vars
   const [selectedSubtopic, setSelectedSubtopic] = useState(null);
   
   // In a real app, this would be fetched from/saved to Supabase table "theory_slides"
