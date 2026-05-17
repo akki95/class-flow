@@ -124,17 +124,14 @@ export default function Login() {
             {isNew ? "Already have an account? Sign in" : `New ${role}? Create account`}
           </p>
 
-          <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.1)", textAlign: "center", display: "flex", gap: 10 }}>
-            <button type="button" onClick={() => handleTestLogin("admin")} style={{ ...styles.testBtn, background: "rgba(239, 68, 68, 0.2)", color: "#fca5a5", border: "1px solid rgba(239, 68, 68, 0.4)", flex: 1, padding: "10px 8px" }}>
-              🛡️ Admin
-            </button>
-            <button type="button" onClick={() => handleTestLogin("teacher")} style={{ ...styles.testBtn, flex: 1, padding: "10px 8px" }}>
-              🧪 Teacher
-            </button>
-            <button type="button" onClick={() => handleTestLogin("student")} style={{ ...styles.testBtn, background: "rgba(59, 130, 246, 0.2)", color: "#93c5fd", border: "1px solid rgba(59, 130, 246, 0.4)", flex: 1, padding: "10px 8px" }}>
-              🎓 Student
-            </button>
-          </div>
+          {/* Test login buttons — dev only */}
+          {process.env.NODE_ENV === "development" && (
+            <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.1)", textAlign: "center", display: "flex", gap: 10 }}>
+              <button type="button" onClick={() => handleTestLogin("admin")} style={{ ...styles.testBtn, background: "rgba(239, 68, 68, 0.2)", color: "#fca5a5", border: "1px solid rgba(239, 68, 68, 0.4)", flex: 1, padding: "10px 8px" }}>🛡️ Admin</button>
+              <button type="button" onClick={() => handleTestLogin("teacher")} style={{ ...styles.testBtn, flex: 1, padding: "10px 8px" }}>🧪 Teacher</button>
+              <button type="button" onClick={() => handleTestLogin("student")} style={{ ...styles.testBtn, background: "rgba(59, 130, 246, 0.2)", color: "#93c5fd", border: "1px solid rgba(59, 130, 246, 0.4)", flex: 1, padding: "10px 8px" }}>🎓 Student</button>
+            </div>
+          )}
         </form>
       </div>
     </div>

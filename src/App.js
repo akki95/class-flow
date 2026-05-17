@@ -104,7 +104,7 @@ export default function App() {
 };
 
   const renderDefaultRoute = () => {
-    if (!user) return <Navigate to="/login" />;
+    if (!user) return <Navigate to="/demo" />;
     if (userRole === "student") return <Navigate to="/student-dashboard" />;
     if (userRole === "admin") return <Navigate to="/admin" />;
     return <Navigate to="/teacher" />;
