@@ -56,7 +56,7 @@ If $Y = aX + b$ for constants $a$ and $b$, then:
       ],
     },
     practice: {
-      question: "A discrete random variable $X$ has the probability distribution below:\n\n$$\\begin{array}{c|cccc} x & 0 & 1 & 2 & 3 \\\\\\ \\hline P(X=x) & k & 2k & 3k & 4k \\end{array}$$\n\n(a) Find the value of $k$. \\quad (b) Find $E(X)$.",
+      question: "A discrete random variable $X$ has the probability distribution below:\n$$\\begin{array}{c|cccc} x & 0 & 1 & 2 & 3 \\\\ \\hline P(X=x) & k & 2k & 3k & 4k \\end{array}$$\n(a) Find the value of $k$. (b) Find $E(X)$.",
       solution: [
         { step: "Part (a): Probabilities must sum to 1", math: "k + 2k + 3k + 4k = 10k = 1" },
         { step: "Solve for k", math: "k = 0.1" },
