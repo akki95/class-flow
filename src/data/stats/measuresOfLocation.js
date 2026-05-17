@@ -74,7 +74,7 @@ For grouped data, use the **midpoint** of each class as the representative value
       ]
     },
     practice: {
-      question: "The frequency table shows the number of siblings for 20 students: 0 siblings (5 students), 1 sibling (8 students), 2 siblings (4 students), 3 siblings (3 students). Find the mean and median number of siblings.",
+      question: "The frequency table below shows the number of siblings for 20 students:\n$$\\begin{array}{c|cccc} x & 0 & 1 & 2 & 3 \\\\ \\hline f & 5 & 8 & 4 & 3 \\end{array}$$\nFind the mean and median number of siblings.",
       solution: [
         {
           step: "Calculate Σfx",

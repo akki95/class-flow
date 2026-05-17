@@ -47,7 +47,7 @@ If $Y = aX + b$ for constants $a$ and $b$, then:
       { label: "Variance", latex: "\\text{Var}(X) = E(X^2) - [E(X)]^2" },
     ],
     example: {
-      question: "X has probability distribution: P(X = 1) = 0.2, P(X = 2) = 0.5, P(X = 3) = 0.3. Find E(X) and Var(X).",
+      question: "$X$ has the following probability distribution:\n$$\\begin{array}{c|ccc} x & 1 & 2 & 3 \\\\ \\hline P(X=x) & 0.2 & 0.5 & 0.3 \\end{array}$$\nFind $E(X)$ and $\\text{Var}(X)$.",
       steps: [
         { label: "Verify probabilities sum to 1", math: "0.2 + 0.5 + 0.3 = 1.0 \\checkmark" },
         { label: "Calculate E(X)", math: "E(X) = 1(0.2) + 2(0.5) + 3(0.3) = 0.2 + 1.0 + 0.9 = 2.1" },

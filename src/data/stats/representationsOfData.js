@@ -75,7 +75,7 @@ When all class widths are **equal**, frequency density is proportional to freque
       ]
     },
     practice: {
-      question: "Times (in seconds) to complete a task were recorded: $0 < t \\leq 10$ (8 people), $10 < t \\leq 15$ (20 people), $15 < t \\leq 30$ (15 people). Calculate the frequency density for each class.",
+      question: "Times (seconds) to complete a task were recorded as shown below:\n$$\\begin{array}{c|cc} \\text{Class} & \\text{Frequency} \\\\ \\hline 0 < t \\leq 10 & 8 \\\\ 10 < t \\leq 15 & 20 \\\\ 15 < t \\leq 30 & 15 \\end{array}$$\nCalculate the frequency density for each class.",
       solution: [
         {
           step: "Class 0–10: frequency density",
