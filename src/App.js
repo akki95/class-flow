@@ -16,6 +16,12 @@ import AdminTheoryDashboard from "./pages/AdminTheoryDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import HomeworkManager from "./pages/HomeworkManager";
 import SequencesFlow from "./pages/SequencesFlow";
+import { ThemeProvider } from "./context/ThemeContext";
+import FeedbackWidget from "./components/FeedbackWidget";
+import PureMathsHome from "./pages/PureMathsHome";
+import StatsHome from "./pages/StatsHome";
+import MechanicsHome from "./pages/MechanicsHome";
+import Demo from "./pages/Demo";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -50,9 +56,9 @@ export default function App() {
   }, []);
 
   if (loading) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#0a0f1e", color: "white", fontSize: "1.1rem", fontFamily: "'Segoe UI', sans-serif" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#f7f4ef", color: "#1c2b3a", fontSize: "1.1rem", fontFamily: "'Segoe UI', sans-serif" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #6366f1, #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18, color: "white", margin: "0 auto 16px" }}>CF</div>
+        <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #1aa38a, #0d8f77)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18, color: "white", margin: "0 auto 16px" }}>CF</div>
         <div>Loading ClassFlow...</div>
       </div>
     </div>
@@ -105,6 +111,7 @@ export default function App() {
   };
 
   return (
+    <ThemeProvider>
     <Router>
       <Routes>
         <Route path="/" element={renderDefaultRoute()} />
@@ -116,8 +123,13 @@ export default function App() {
         <Route path="/igcse-student/:sessionId" element={<IGCSEStudentView />} />
         <Route path="/admin" element={user ? <AdminDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/admin/theory" element={user ? <AdminTheoryDashboard user={user} onBack={() => window.history.back()} /> : <Navigate to="/login" />} />
-        <Route path="/igcse/edexcel/sequences" element={user ? <SequencesFlow /> : <Navigate to="/login" />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/igcse/edexcel/sequences" element={<SequencesFlow />} />
+        <Route path="/igcse/edexcel/pure" element={<><PureMathsHome /><FeedbackWidget userEmail={user?.email} /></>} />
+        <Route path="/igcse/edexcel/stats" element={<><StatsHome /><FeedbackWidget userEmail={user?.email} /></>} />
+        <Route path="/igcse/edexcel/mechanics" element={<><MechanicsHome /><FeedbackWidget userEmail={user?.email} /></>} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 }

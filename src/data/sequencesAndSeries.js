@@ -4,6 +4,16 @@ export const SEQUENCES_META = {
   totalTopics: 6,
 };
 
+// Chapter-format meta (for PURE_CHAPTERS)
+export const CHAPTER_META = {
+  id: "sequences-series",
+  title: "Sequences & Series",
+  subtitle: "Arithmetic, geometric, infinite and sigma notation",
+  icon: "∑",
+  color: "#3ecfaa",
+  paper: "Pure",
+};
+
 export const SEQUENCES_TOPICS = [
   {
     id: "arithmetic-sequence",

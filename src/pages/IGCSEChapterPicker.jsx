@@ -41,17 +41,33 @@ export default function IGCSEChapterPicker({ chapters, onSelect, onBack }) {
         {/* Pinned mastery flows */}
         <div style={styles.masterySection}>
           <div style={styles.masterySectionLabel}>Mastery Flows</div>
-          <button onClick={() => navigate("/igcse/edexcel/sequences")} style={styles.masteryCard}>
-            <div style={styles.masteryIcon}>∑</div>
+          <button onClick={() => navigate("/igcse/edexcel/pure")} style={styles.masteryCard}>
+            <div style={styles.masteryIcon}>∂</div>
             <div style={{ flex: 1, textAlign: "left" }}>
-              <div style={styles.masteryTitle}>
-                Sequences &amp; Series
-                <span style={styles.newBadge}>New</span>
-              </div>
-              <div style={styles.masterySub}>Arithmetic · Geometric · Infinite · Sigma Notation</div>
+              <div style={styles.masteryTitle}>Pure Mathematics</div>
+              <div style={styles.masterySub}>9 chapters · Proof · Algebra · Calculus · Sequences · Vectors</div>
             </div>
             <div style={styles.masteryArrow}>→</div>
           </button>
+
+          <button onClick={() => navigate("/igcse/edexcel/stats")} style={{ ...styles.masteryCard, borderColor: "#22d3ee40" }}>
+            <div style={{ ...styles.masteryIcon, background: "#22d3ee20", color: "#22d3ee" }}>σ</div>
+            <div style={{ flex: 1, textAlign: "left" }}>
+              <div style={styles.masteryTitle}>Statistics</div>
+              <div style={styles.masterySub}>7 chapters · Data · Probability · Binomial · Hypothesis Testing</div>
+            </div>
+            <div style={{ ...styles.masteryArrow, color: "#22d3ee" }}>→</div>
+          </button>
+
+          <button onClick={() => navigate("/igcse/edexcel/mechanics")} style={{ ...styles.masteryCard, borderColor: "#f9731640" }}>
+            <div style={{ ...styles.masteryIcon, background: "#f9731620", color: "#f97316" }}>⚙️</div>
+            <div style={{ flex: 1, textAlign: "left" }}>
+              <div style={styles.masteryTitle}>Mechanics</div>
+              <div style={styles.masterySub}>4 chapters · Modelling · SUVAT · Forces · Variable Acceleration</div>
+            </div>
+            <div style={{ ...styles.masteryArrow, color: "#f97316" }}>→</div>
+          </button>
+
         </div>
 
         <div style={styles.sectionLabel}>All Chapters</div>
