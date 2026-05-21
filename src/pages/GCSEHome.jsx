@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import MasteryFlow from "../components/MasteryFlow";
 import { useTheme, ThemeToggle } from "../context/ThemeContext";
 import { GRADE45_CHAPTERS } from "../data/gcse/grade45/index";
+import { GRADE67_CHAPTERS } from "../data/gcse/grade67/index";
+import { GRADE89_CHAPTERS } from "../data/gcse/grade89/index";
 
 const GRADE_BANDS = [
   {
@@ -18,19 +20,19 @@ const GRADE_BANDS = [
     id: "67",
     label: "Grade 6–7",
     emoji: "📙",
-    desc: "Quadratics, circle theorems, trig, histograms",
+    desc: "Quadratics, circle theorems, trig, histograms, conditional probability",
     color: "#f59e0b",
-    chapters: [],
-    available: false,
+    chapters: GRADE67_CHAPTERS,
+    available: true,
   },
   {
     id: "89",
     label: "Grade 8–9",
     emoji: "📕",
-    desc: "Proof, functions, iteration, vectors, surds",
+    desc: "Proof, functions, iteration, vector proof, surds, growth & decay",
     color: "#ef4444",
-    chapters: [],
-    available: false,
+    chapters: GRADE89_CHAPTERS,
+    available: true,
   },
 ];
 
