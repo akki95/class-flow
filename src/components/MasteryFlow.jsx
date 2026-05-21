@@ -244,7 +244,6 @@ function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone
   const VizComponent = topic.visualization ? vizMap[topic.visualization] : null;
   const scrollRef = useRef(null);
   const [showTopicVideo, setShowTopicVideo] = useState(false);
-  const videoSidebarOpen = activeTool === "geogebra" || activeTool === "desmos" || showTopicVideo;
   const sidebarWidth = activeTool === "geogebra" ? 460 : (activeTool === "desmos" || showTopicVideo) ? 480 : 0;
 
   const handleToolClick = (id) => {
