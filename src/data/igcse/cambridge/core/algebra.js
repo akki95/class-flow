@@ -22,8 +22,8 @@ export const CHAPTER_TOPICS = [
     desmosExpressions: [],
     theory: `**Like terms** have the same variable(s) raised to the same power(s). They can be collected (added or subtracted) but unlike terms cannot.
 
-$$3x^2 + 5x^2 = 8x^2 \quad \text{(like terms)}$$
-$$3x^2 + 5x \quad \text{(cannot be simplified — unlike terms)}$$
+$$3x^2 + 5x^2 = 8x^2 \\quad \text{(like terms)}$$
+$$3x^2 + 5x \\quad \text{(cannot be simplified — unlike terms)}$$
 
 **Expanding brackets:** multiply every term inside the brackets by the term outside.
 $$a(b + c) = ab + ac$$
@@ -97,7 +97,7 @@ $$x = \\mathbf{6}$$
     desmosExpressions: [],
     theory: `**Substitution:** replace letters with numbers and evaluate following **BODMAS**. Always substitute into the formula carefully, using brackets around negative values.
 
-$$\text{If } s = ut + \tfrac{1}{2}at^2, \; u=5, \; a=10, \; t=3: \quad s = 5(3) + \tfrac{1}{2}(10)(9) = 15 + 45 = 60$$
+$$\text{If } s = ut + \tfrac{1}{2}at^2, \\; u=5, \\; a=10, \\; t=3: \\quad s = 5(3) + \tfrac{1}{2}(10)(9) = 15 + 45 = 60$$
 
 **Rearranging formulae:** treat the formula like an equation. Use inverse operations to make the required variable the subject. Move terms step by step using the balance method.
 
@@ -245,7 +245,7 @@ $$y = -\\frac{3}{2}x + 6$$
 
 > **When multiplying or dividing both sides by a negative number, flip (reverse) the inequality sign.**
 
-$$-2x > 4 \\implies x < -2 \quad \\text{(sign flipped)}$$
+$$-2x > 4 \\implies x < -2 \\quad \\text{(sign flipped)}$$
 
 **Representing on a number line:**
 - **Open circle** $\\circ$ for strict inequalities ($<$ or $>$) — the endpoint is **not** included.

@@ -124,7 +124,7 @@ $$\text{IQR} = Q_3 - Q_1$$
 **Box plot** (box-and-whisker diagram): Drawn on a number line using five values: minimum, $Q_1$, median, $Q_3$, maximum.
 
 **Outlier criterion:**
-$$\text{Outlier if value} < Q_1 - 1.5 \times \text{IQR} \quad \text{or} \quad \text{value} > Q_3 + 1.5 \times \text{IQR}$$
+$$\text{Outlier if value} < Q_1 - 1.5 \times \text{IQR} \\quad \text{or} \\quad \text{value} > Q_3 + 1.5 \times \text{IQR}$$
 
 **Comparing distributions — exam technique:**
 When asked to compare two distributions, you **must** state:
@@ -143,11 +143,11 @@ Always write comparisons **in context** using the actual data values.`,
       },
       {
         label: "Quartile positions",
-        expression: "Q_1 \text{ at } \\frac{n}{4}, \quad Q_3 \text{ at } \\frac{3n}{4}",
+        expression: "Q_1 \text{ at } \\frac{n}{4}, \\quad Q_3 \text{ at } \\frac{3n}{4}",
       },
       {
         label: "Outlier bounds",
-        expression: "<Q_1-1.5\times\text{IQR} \quad \text{or} \quad >Q_3+1.5\times\text{IQR}",
+        expression: "<Q_1-1.5\times\text{IQR} \\quad \text{or} \\quad >Q_3+1.5\times\text{IQR}",
       },
     ],
     example: {
@@ -187,7 +187,7 @@ A score of $85$ is exactly at the upper boundary. Whether it counts as an outlie
     desmosExpressions: [],
     theory: `**Conditional probability** is the probability of event $A$ occurring given that event $B$ has already occurred.
 
-$$P(A|B) = \\frac{P(A \cap B)}{P(B)}$$
+$$P(A|B) = \\frac{P(A \\cap B)}{P(B)}$$
 
 **Tree diagrams — without replacement:**
 When items are selected without replacement, the probabilities on the second set of branches change depending on the outcome of the first selection. The total number of items decreases by one.
@@ -195,30 +195,30 @@ When items are selected without replacement, the probabilities on the second set
 Multiply along branches to find the probability of a combined outcome. Add the results for mutually exclusive outcomes.
 
 **Venn diagrams:**
-$$P(A \\cup B) = P(A) + P(B) - P(A \cap B)$$
-$$P(A \text{ only}) = P(A) - P(A \cap B)$$
-$$P(A' \cap B') = 1 - P(A \\cup B)$$
+$$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$$
+$$P(A \text{ only}) = P(A) - P(A \\cap B)$$
+$$P(A' \\cap B') = 1 - P(A \\cup B)$$
 
 **Two-way tables:**
 To find a conditional probability from a table, restrict attention to the relevant row or column and calculate within that subgroup.
 
 **Independent events:**
 Events $A$ and $B$ are independent if:
-$$P(A|B) = P(A) \quad \text{and} \quad P(A \cap B) = P(A) \times P(B)$$
+$$P(A|B) = P(A) \\quad \text{and} \\quad P(A \\cap B) = P(A) \times P(B)$$
 
 > **Exam tip:** For without-replacement questions, always check whether to subtract 1 from the numerator, the denominator, or both when moving to the second draw.`,
     formulas: [
       {
         label: "Conditional Probability",
-        expression: "P(A|B)=\\frac{P(A\cap B)}{P(B)}",
+        expression: "P(A|B)=\\frac{P(A\\cap B)}{P(B)}",
       },
       {
         label: "Union Rule",
-        expression: "P(A\\cup B)=P(A)+P(B)-P(A\cap B)",
+        expression: "P(A\\cup B)=P(A)+P(B)-P(A\\cap B)",
       },
       {
         label: "Independent Events",
-        expression: "P(A\cap B)=P(A)\times P(B)",
+        expression: "P(A\\cap B)=P(A)\times P(B)",
       },
       {
         label: "Without Replacement",
@@ -242,11 +242,11 @@ $$P(\text{same}) = \\frac{20}{56} + \\frac{6}{56} = \\frac{26}{56} = \\frac{13}{
         question:
           "A survey of $100$ students found: $60$ study Maths, $45$ study Science, $30$ study both. Find $P(\text{studies Maths} \\mid \text{studies Science})$.",
         solution: `**Identify the values:**
-$$P(M \cap S) = \\frac{30}{100} = 0.3$$
+$$P(M \\cap S) = \\frac{30}{100} = 0.3$$
 $$P(S) = \\frac{45}{100} = 0.45$$
 
 **Apply the conditional probability formula:**
-$$P(M|S) = \\frac{P(M \cap S)}{P(S)} = \\frac{30/100}{45/100} = \\frac{30}{45} = \\frac{2}{3}$$
+$$P(M|S) = \\frac{P(M \\cap S)}{P(S)} = \\frac{30/100}{45/100} = \\frac{30}{45} = \\frac{2}{3}$$
 
 Alternatively, of the $45$ students who study Science, $30$ also study Maths, so $P(M|S) = \\frac{30}{45} = \\frac{2}{3}$.`,
       },
