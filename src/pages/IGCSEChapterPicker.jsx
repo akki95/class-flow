@@ -68,6 +68,15 @@ export default function IGCSEChapterPicker({ chapters, onSelect, onBack }) {
             <div style={{ ...styles.masteryArrow, color: "#f97316" }}>→</div>
           </button>
 
+          <button onClick={() => navigate("/igcse/edexcel/past-papers")} style={{ ...styles.masteryCard, borderColor: "#f59e0b40" }}>
+            <div style={{ ...styles.masteryIcon, background: "#f59e0b20", color: "#f59e0b" }}>📄</div>
+            <div style={{ flex: 1, textAlign: "left" }}>
+              <div style={styles.masteryTitle}>Past Papers</div>
+              <div style={styles.masterySub}>2018–2024 · Pure · Stats · Mechanics · Mark Schemes</div>
+            </div>
+            <div style={{ ...styles.masteryArrow, color: "#f59e0b" }}>→</div>
+          </button>
+
         </div>
 
         <div style={styles.sectionLabel}>All Chapters</div>

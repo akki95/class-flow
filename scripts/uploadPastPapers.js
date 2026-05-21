@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 
 // ─── Config ────────────────────────────────────────────────────────────────────
-const SUPABASE_URL = "https://zdlvedduzamfujdngnxr.supabase.co";
+const SUPABASE_URL = "https://yhlhtrcfysuvsfchqzxo.supabase.co";
 // Use service role key for uploads (get from Supabase dashboard → Settings → API)
 const SERVICE_ROLE_KEY_PATH = path.join(__dirname, "supabase-service-key.txt");
 const SOURCE_DIR = "/Users/akashagrawal/Desktop/platform-past-paper-content";

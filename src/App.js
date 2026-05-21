@@ -22,6 +22,7 @@ import FeedbackWidget from "./components/FeedbackWidget";
 import PureMathsHome from "./pages/PureMathsHome";
 import StatsHome from "./pages/StatsHome";
 import MechanicsHome from "./pages/MechanicsHome";
+import PastPapersHome from "./pages/PastPapersHome";
 import Demo from "./pages/Demo";
 
 export default function App() {
@@ -129,6 +130,7 @@ export default function App() {
         <Route path="/igcse/edexcel/pure" element={<><PureMathsHome /><FeedbackWidget userEmail={user?.email} /></>} />
         <Route path="/igcse/edexcel/stats" element={<><StatsHome /><FeedbackWidget userEmail={user?.email} /></>} />
         <Route path="/igcse/edexcel/mechanics" element={<><MechanicsHome /><FeedbackWidget userEmail={user?.email} /></>} />
+        <Route path="/igcse/edexcel/past-papers" element={<PastPapersHome />} />
       </Routes>
     </Router>
     <Analytics />
