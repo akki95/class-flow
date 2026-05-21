@@ -54,13 +54,24 @@ const LEVELS = [
     ],
   },
   {
+    id: "a2",
+    label: "A-Level Year 2",
+    tag: "Ages 17–18",
+    desc: "Edexcel 9MA0 · Full A-Level",
+    color: "#818cf8",
+    subjects: [
+      { id: "a2-pure", icon: "∂", title: "Pure Mathematics Y2", desc: "9 chapters — Partial fractions, Trig identities, Chain rule, Integration by parts, Parametric, Vectors 3D", accent: "#6366f1", route: "/alevel" },
+      { id: "a2-stats", icon: "🔔", title: "Statistics Y2", desc: "Normal distribution, Hypothesis testing for mean and correlation", accent: "#22d3ee", route: "/alevel" },
+      { id: "a2-mech", icon: "🚀", title: "Mechanics Y2", desc: "Moments, Projectile motion, Forces in 2D, Friction on slopes", accent: "#f97316", route: "/alevel" },
+    ],
+  },
+  {
     id: "coming",
     label: "Coming soon",
     tag: "",
     desc: "",
     color: "#64748b",
     subjects: [
-      { id: "a2", icon: "📘", title: "A-Level Year 2", desc: "Full A-Level — parametric, integration by parts, normal distribution, moments", accent: "#64748b", route: null },
       { id: "igcse", icon: "🌍", title: "IGCSE Cambridge", desc: "Cambridge International · Core & Extended", accent: "#64748b", route: null },
     ],
   },

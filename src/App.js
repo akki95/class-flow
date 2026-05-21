@@ -24,6 +24,7 @@ import StatsHome from "./pages/StatsHome";
 import MechanicsHome from "./pages/MechanicsHome";
 import PastPapersHome from "./pages/PastPapersHome";
 import GCSEHome from "./pages/GCSEHome";
+import ALevelHome from "./pages/ALevelHome";
 import Demo from "./pages/Demo";
 
 export default function App() {
@@ -134,6 +135,8 @@ export default function App() {
         <Route path="/igcse/edexcel/past-papers" element={<PastPapersHome />} />
         <Route path="/gcse" element={<GCSEHome />} />
         <Route path="/gcse/higher" element={<GCSEHome />} />
+        <Route path="/alevel" element={<ALevelHome />} />
+        <Route path="/alevel/year2" element={<ALevelHome />} />
       </Routes>
     </Router>
     <Analytics />
