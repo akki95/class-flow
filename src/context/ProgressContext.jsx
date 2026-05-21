@@ -71,6 +71,36 @@ export function ProgressProvider({ children }) {
     return new Set(Object.keys(progress.completedTopics));
   }, [progress.completedTopics]);
 
+  // ── Layer tracking (Phase 2 — 4-layer evaluation) ───────────────────────────
+  const markLayerPassed = useCallback((topicId, layer) => {
+    setProgress(prev => {
+      const existing = prev.topicLayers[topicId] || {};
+      const next = {
+        ...prev,
+        topicLayers: {
+          ...prev.topicLayers,
+          [topicId]: {
+            ...existing,
+            [layer]: { passed: true, date: Date.now() },
+          },
+        },
+      };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, []);
+
+  const getTopicLayers = useCallback((topicId) => {
+    return progress.topicLayers[topicId] || {};
+  }, [progress.topicLayers]);
+
+  const getTopicMastery = useCallback((topicId) => {
+    const layers = progress.topicLayers[topicId] || {};
+    const LAYERS = ["recall", "procedure", "spotMistake", "transfer"];
+    const passed = LAYERS.filter(l => layers[l]?.passed).length;
+    return { passed, total: LAYERS.length, pct: Math.round((passed / LAYERS.length) * 100) };
+  }, [progress.topicLayers]);
+
   // ── Visit tracking ───────────────────────────────────────────────────────────
   const markVisited = useCallback((topicId) => {
     setProgress(prev => {
@@ -111,6 +141,10 @@ export function ProgressProvider({ children }) {
       unmarkTopicComplete,
       isTopicComplete,
       getCompletedSet,
+      // layers (Phase 2)
+      markLayerPassed,
+      getTopicLayers,
+      getTopicMastery,
       // visits
       markVisited,
       daysSinceVisit,

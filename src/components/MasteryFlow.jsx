@@ -3,6 +3,7 @@ import MathText from "./MathText";
 import { useTheme, ThemeToggle, DARK } from "../context/ThemeContext";
 import { useProgress } from "../context/ProgressContext";
 import VideoModal from "./VideoModal";
+import EvaluationModal from "./EvaluationModal";
 
 // Back-compat: pages that import CF directly get the dark palette as a static fallback.
 // They should migrate to useTheme() but this prevents import errors in the meantime.
@@ -258,9 +259,13 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
 // ─── Topic View ────────────────────────────────────────────────────────────────
 function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone, isDone, activeTool, setActiveTool, vizMap }) {
   const { T } = useTheme();
+  const { getTopicMastery, getTopicLayers } = useProgress();
   const VizComponent = topic.visualization ? vizMap[topic.visualization] : null;
   const scrollRef = useRef(null);
   const [showTopicVideo, setShowTopicVideo] = useState(false);
+  const [showEvaluation, setShowEvaluation] = useState(false);
+  const mastery = getTopicMastery(topic.id);
+  const layers = getTopicLayers(topic.id);
   const sidebarWidth = activeTool === "geogebra" ? 460 : (activeTool === "desmos" || showTopicVideo) ? 480 : 0;
 
   const handleToolClick = (id) => {
@@ -330,13 +335,38 @@ function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone
           <Section title="Worked Example" icon="✏️"><ExampleCard example={topic.example} color={topic.color} /></Section>
           <Section title="Practice" icon="🎯"><PracticeCard practice={topic.practice} color={topic.color} /></Section>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginTop: 24 }}>
+          {/* Evaluation CTA */}
+          <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 14, padding: "16px 20px", marginTop: 24, display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ color: T.text, fontWeight: 700, fontSize: 14, marginBottom: 3 }}>Test Your Understanding</div>
+              <div style={{ color: T.muted, fontSize: 12 }}>
+                {mastery.passed > 0
+                  ? `${mastery.passed}/${mastery.total} layers passed · ${mastery.pct}% mastery`
+                  : "AI generates 4 personalised questions · Recall → Procedure → Spot the Mistake → Transfer"}
+              </div>
+              {mastery.passed > 0 && (
+                <div style={{ display: "flex", gap: 4, marginTop: 8 }}>
+                  {["recall","procedure","spotMistake","transfer"].map(l => (
+                    <div key={l} style={{ flex: 1, height: 4, borderRadius: 2, background: layers[l]?.passed ? T.green : T.border, transition: "background 0.3s" }} />
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={() => setShowEvaluation(true)} style={{ background: topic.color, border: "none", borderRadius: 9, padding: "10px 20px", color: "#04120d", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif", flexShrink: 0 }}>
+              {mastery.passed > 0 ? "Retry ↗" : "Start ↗"}
+            </button>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginTop: 14 }}>
             <button onClick={onPrev} disabled={topicIdx === 0} style={{ background: T.surface, border: "none", color: T.label, borderRadius: 9, padding: "11px 24px", cursor: "pointer", fontWeight: 600, fontSize: 14, fontFamily: "'Segoe UI', sans-serif", opacity: topicIdx === 0 ? 0.3 : 1 }}>← Previous</button>
-            <button onClick={onMarkDone} style={{ borderRadius: 9, padding: "11px 24px", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Segoe UI', sans-serif", transition: "all 0.25s", background: isDone ? T.greenBg : topic.color, border: `1px solid ${isDone ? T.green : "transparent"}`, color: isDone ? T.green : "#04120d" }}>
+            <button onClick={onMarkDone} style={{ borderRadius: 9, padding: "11px 24px", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Segoe UI', sans-serif", transition: "all 0.25s", background: isDone ? T.greenBg : T.surface, border: `1px solid ${isDone ? T.green : T.border}`, color: isDone ? T.green : T.sub }}>
               {isDone ? "✓ Completed" : "Mark Complete"}
             </button>
             <button onClick={onNext} disabled={topicIdx === topics.length - 1} style={{ background: topic.color, border: "none", color: "#04120d", borderRadius: 9, padding: "11px 24px", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Segoe UI', sans-serif", opacity: topicIdx === topics.length - 1 ? 0.3 : 1 }}>Next →</button>
           </div>
+
+          {/* Evaluation modal */}
+          {showEvaluation && <EvaluationModal topic={topic} onClose={() => setShowEvaluation(false)} />}
         </div>
       </div>
 
