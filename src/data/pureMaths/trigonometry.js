@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Ratios, identities, equations and radians",
   icon: "〜",
   color: "#4ade80",
+  videoUrl: "https://www.youtube.com/watch?v=OkYGhvKIYiE",
   paper: "Pure",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Probability distributions and the binomial model",
   icon: "🔔",
   color: "#38bdf8",
+  videoUrl: "https://www.youtube.com/watch?v=T77mtUNbfCc",
   paper: "Statistics",
 };
 

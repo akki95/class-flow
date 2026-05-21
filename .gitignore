@@ -24,3 +24,5 @@ yarn-error.log*
 .env
 .env.local
 scripts/serviceAccount.json
+scripts/service-account.json
+scripts/supabase-service-key.txt

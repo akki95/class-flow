@@ -65,6 +65,13 @@ function ChapterGrid({ onSelect }) {
                 </div>
                 <div style={st.chTitle}>{meta.title}</div>
                 <div style={st.chSub}>{meta.subtitle}</div>
+                {meta.videoUrl && (
+                  <a href={meta.videoUrl} target="_blank" rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, color: "#e03131", fontSize: 11, fontWeight: 700, textDecoration: "none" }}>
+                    ▶ Watch
+                  </a>
+                )}
               </button>
             );
           })}
@@ -87,6 +94,7 @@ export default function MechanicsHome() {
         title={meta.title}
         subtitle={meta.subtitle}
         onBack={() => setSelectedChapter(null)}
+        videoUrl={meta.videoUrl || null}
         vizMap={{}}
       />
     );

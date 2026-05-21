@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "SUVAT equations, graphs and vertical motion",
   icon: "🚀",
   color: "#f97316",
+  videoUrl: "https://www.youtube.com/watch?v=19Yc4i5QSfA",
   paper: "Mechanics",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Significance tests for the binomial distribution",
   icon: "🔬",
   color: "#2dd4bf",
+  videoUrl: "https://www.youtube.com/watch?v=z4kccxhR53k",
   paper: "Statistics",
 };
 

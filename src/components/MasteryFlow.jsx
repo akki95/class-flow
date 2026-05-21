@@ -178,7 +178,7 @@ function Section({ title, icon, children }) {
 }
 
 // ─── Agenda ────────────────────────────────────────────────────────────────────
-function AgendaView({ topics, completed, onStart, title, subtitle }) {
+function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
   const { T } = useTheme();
   return (
     <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', sans-serif", padding: 24 }}>
@@ -192,8 +192,15 @@ function AgendaView({ topics, completed, onStart, title, subtitle }) {
           <ThemeToggle style={{ marginLeft: "auto" }} />
         </div>
 
-        <h1 style={{ fontSize: 28, fontWeight: 900, margin: "0 0 6px", color: T.text, letterSpacing: "-0.02em" }}>{title}</h1>
-        {subtitle && <p style={{ color: T.sub, fontSize: 14, margin: "0 0 24px", fontWeight: 400, lineHeight: 1.6 }}>{subtitle}</p>}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4, flexWrap: "wrap" }}>
+          <h1 style={{ fontSize: 28, fontWeight: 900, margin: 0, color: T.text, letterSpacing: "-0.02em" }}>{title}</h1>
+          {videoUrl && (
+            <a href={videoUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 7, background: "#ff000012", border: "1px solid #ff000028", borderRadius: 9, padding: "8px 16px", color: "#e03131", fontWeight: 700, fontSize: 13, textDecoration: "none", flexShrink: 0, fontFamily: "'Segoe UI', sans-serif", whiteSpace: "nowrap" }}>
+              ▶ Watch on YouTube
+            </a>
+          )}
+        </div>
+        {subtitle && <p style={{ color: T.sub, fontSize: 14, margin: "0 0 24px", fontWeight: 400, lineHeight: 1.6, marginTop: 6 }}>{subtitle}</p>}
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
           <span style={{ color: T.sub, fontSize: 12, fontWeight: 600 }}>{completed.size} of {topics.length} topics completed</span>
@@ -326,7 +333,7 @@ function SummaryView({ completed, total, onRestart, onGoAgenda }) {
 }
 
 // ─── Root export ───────────────────────────────────────────────────────────────
-export default function MasteryFlow({ topics, onBack, title, subtitle, vizMap = {} }) {
+export default function MasteryFlow({ topics, onBack, title, subtitle, vizMap = {}, videoUrl = null }) {
   const [view, setView]           = useState("agenda");
   const [topicIdx, setTopicIdx]   = useState(0);
   const [completed, setCompleted] = useState(new Set());
@@ -347,7 +354,7 @@ export default function MasteryFlow({ topics, onBack, title, subtitle, vizMap = 
     });
   }, [topicIdx, topics]);
 
-  if (view === "agenda") return <AgendaView topics={topics} completed={completed} onStart={handleStart} title={title} subtitle={subtitle} />;
+  if (view === "agenda") return <AgendaView topics={topics} completed={completed} onStart={handleStart} title={title} subtitle={subtitle} videoUrl={videoUrl} />;
   if (view === "summary") return <SummaryView completed={completed} total={topics.length} onRestart={() => { setCompleted(new Set()); setTopicIdx(0); setView("agenda"); }} onGoAgenda={() => setView("agenda")} />;
 
   const topic = topics[topicIdx];

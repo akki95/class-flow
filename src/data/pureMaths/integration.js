@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Indefinite, definite integration and area",
   icon: "∫",
   color: "#0be5a0",
+  videoUrl: "https://www.youtube.com/watch?v=-DnyVWEzBhE",
   paper: "Pure",
 };
 

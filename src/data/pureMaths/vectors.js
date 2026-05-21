@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "2D vectors, magnitude and position vectors",
   icon: "→",
   color: "#86efac",
+  videoUrl: "https://www.youtube.com/watch?v=EJ3dwJfmzpI",
   paper: "Pure",
 };
 

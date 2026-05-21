@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Deduction, exhaustion and counter-examples",
   icon: "✓",
   color: "#00d4aa",
+  videoUrl: "https://www.youtube.com/watch?v=1Sbs7Dc3pc4",
   paper: "Pure",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Newton's laws, friction and connected particles",
   icon: "⚖️",
   color: "#f87171",
+  videoUrl: "https://www.youtube.com/watch?v=OjCmuVK-KJo",
   paper: "Mechanics",
 };
 

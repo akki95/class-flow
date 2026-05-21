@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Calculus methods in kinematics",
   icon: "∫",
   color: "#c084fc",
+  videoUrl: "https://www.youtube.com/watch?v=rpR8XiGEx1w",
   paper: "Mechanics",
 };
 

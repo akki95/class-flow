@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Venn diagrams, tree diagrams and conditional probability",
   icon: "🎲",
   color: "#c084fc",
+  videoUrl: "https://www.youtube.com/watch?v=j6yMS-vkL6g",
   paper: "Statistics",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Scatter diagrams, PMCC and linear regression",
   icon: "📡",
   color: "#a78bfa",
+  videoUrl: "https://www.youtube.com/watch?v=Fr1t7R8yWSU",
   paper: "Statistics",
 };
 

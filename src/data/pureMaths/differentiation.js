@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Rates of change, tangents and stationary points",
   icon: "∂",
   color: "#16a34a",
+  videoUrl: "https://www.youtube.com/watch?v=5NPmPUeUe8o",
   paper: "Pure",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Histograms, box plots, cumulative frequency and outliers",
   icon: "📉",
   color: "#818cf8",
+  videoUrl: "https://www.youtube.com/watch?v=cM9u_hmYIDI",
   paper: "Statistics",
 };
 

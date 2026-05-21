@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Indices, quadratics, polynomials and graphs",
   icon: "∫",
   color: "#10b981",
+  videoUrl: "https://www.youtube.com/watch?v=iBtJyBIGRMc",
   paper: "Pure",
 };
 

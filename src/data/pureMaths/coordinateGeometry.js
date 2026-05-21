@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Straight lines and circles",
   icon: "📍",
   color: "#34d399",
+  videoUrl: "https://www.youtube.com/watch?v=QUM7VzuffyQ",
   paper: "Pure",
 };
 

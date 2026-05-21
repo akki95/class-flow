@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Mean, median, standard deviation and coding",
   icon: "📈",
   color: "#60a5fa",
+  videoUrl: "https://www.youtube.com/watch?v=cM9u_hmYIDI",
   paper: "Statistics",
 };
 

@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Laws of logs, natural log, solving equations",
   icon: "eˣ",
   color: "#22c55e",
+  videoUrl: "https://www.youtube.com/watch?v=EdN6irvBYqc",
   paper: "Pure",
 };
 

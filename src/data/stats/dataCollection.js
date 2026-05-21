@@ -6,6 +6,7 @@ export const CHAPTER_META = {
   subtitle: "Populations, samples and sampling methods",
   icon: "📋",
   color: "#22d3ee",
+  videoUrl: "https://www.youtube.com/watch?v=cM9u_hmYIDI",
   paper: "Statistics",
 };
 
