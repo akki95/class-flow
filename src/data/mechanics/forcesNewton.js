@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "newtons-laws",
+    videoUrl: "https://www.youtube.com/watch?v=OjCmuVK-KJo",
     icon: "N",
     title: "Newton's Laws of Motion",
     subtitle: "Three fundamental laws of motion",
@@ -76,6 +77,7 @@ $$\\mathbf{F}_{A \\text{ on } B} = -\\mathbf{F}_{B \\text{ on } A}$$
   },
   {
     id: "friction",
+    videoUrl: null,
     icon: "μ",
     title: "Friction",
     subtitle: "Coefficient of friction, limiting equilibrium",
@@ -142,6 +144,7 @@ where $\\theta$ is the angle of the slope to the horizontal. This is a useful re
   },
   {
     id: "connected-particles",
+    videoUrl: "https://www.youtube.com/watch?v=ihOyUVvQ5nk",
     icon: "⟷",
     title: "Connected Particles",
     subtitle: "Strings, pulleys and Atwood machines",

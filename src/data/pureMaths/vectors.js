@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "vector-basics",
+    videoUrl: "https://www.youtube.com/watch?v=E2H0W3eXpkg",
     icon: "→",
     title: "Introduction to Vectors",
     subtitle: "Notation, addition and scalar multiplication",
@@ -80,6 +81,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "magnitude-unit",
+    videoUrl: "https://www.youtube.com/watch?v=QNuSJ4ypVd0",
     icon: "|v|",
     title: "Magnitude & Unit Vectors",
     subtitle: "Length of a vector, direction",
@@ -135,6 +137,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "position-vectors",
+    videoUrl: "https://www.youtube.com/watch?v=JxR96iOhLOU",
     icon: "OA",
     title: "Position Vectors & Applications",
     subtitle: "Point positions, displacement and geometry",

@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "indefinite-integration",
+    videoUrl: "https://www.youtube.com/watch?v=3kSgGBHMdjo",
     icon: "∫",
     title: "Indefinite Integration",
     subtitle: "Reverse of differentiation, +c",
@@ -71,6 +72,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "definite-integration",
+    videoUrl: "https://www.youtube.com/watch?v=bs8hSzerIeQ",
     icon: "∫ₐᵇ",
     title: "Definite Integration",
     subtitle: "Evaluating between limits",
@@ -130,6 +132,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "area-under-curve",
+    videoUrl: "https://www.youtube.com/watch?v=YGH2mqHs2ow",
     icon: "▭",
     title: "Area Under a Curve",
     subtitle: "Area bounded by curve and x-axis",
@@ -196,6 +199,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "trapezium-rule",
+    videoUrl: "https://www.youtube.com/watch?v=4lSuPwccd8Y",
     icon: "⌺",
     title: "Trapezium Rule",
     subtitle: "Numerical approximation of area",

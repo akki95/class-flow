@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "indices-surds",
+    videoUrl: "https://www.youtube.com/watch?v=iMIGYz9YD8M",
     icon: "√",
     title: "Indices & Surds",
     subtitle: "Laws of indices, simplifying surds",
@@ -95,6 +96,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "quadratics",
+    videoUrl: "https://www.youtube.com/watch?v=gYFLXnbboNM",
     icon: "∪",
     title: "Quadratics",
     subtitle: "Completing the square, discriminant",
@@ -169,6 +171,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "simultaneous-equations",
+    videoUrl: "https://www.youtube.com/watch?v=SeA856Q53yg",
     icon: "=",
     title: "Simultaneous Equations",
     subtitle: "Linear and nonlinear systems",
@@ -238,6 +241,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "inequalities",
+    videoUrl: "https://www.youtube.com/watch?v=fdKMpPw52ms",
     icon: "<",
     title: "Inequalities",
     subtitle: "Linear and quadratic inequalities",
@@ -295,6 +299,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "polynomials",
+    videoUrl: "https://www.youtube.com/watch?v=6A7PUA4UAPM",
     icon: "P",
     title: "Polynomials & Factor Theorem",
     subtitle: "Factor theorem, polynomial division",
@@ -361,6 +366,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "graphs-transformations",
+    videoUrl: "https://www.youtube.com/watch?v=Ou5lHk9dsPQ",
     icon: "↕",
     title: "Graphs & Transformations",
     subtitle: "Translations, stretches, reflections",

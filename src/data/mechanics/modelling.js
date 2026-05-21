@@ -12,6 +12,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "models-assumptions",
+    videoUrl: "https://www.youtube.com/watch?v=EoBMMVW96ag",
     icon: "≈",
     title: "Mathematical Models & Assumptions",
     subtitle: "Particles, rods, strings — what we assume",
@@ -58,6 +59,7 @@ Whenever you list assumptions, explain their effect: what quantity or behaviour 
   },
   {
     id: "units-scalars-vectors",
+    videoUrl: "https://www.youtube.com/watch?v=EDhZyRo2dVA",
     icon: "→",
     title: "SI Units, Scalars and Vectors",
     subtitle: "Fundamental units and vector/scalar classification",
@@ -121,6 +123,7 @@ Newton's Second Law $F = ma$ is a **vector equation**: the resultant force and t
   },
   {
     id: "force-diagrams",
+    videoUrl: "https://www.youtube.com/watch?v=_5al_NNGXyg",
     icon: "↑",
     title: "Force Diagrams",
     subtitle: "Drawing and resolving contact forces",

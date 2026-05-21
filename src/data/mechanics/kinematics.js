@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "motion-graphs",
+    videoUrl: "https://www.youtube.com/watch?v=qjazCsnLpqU",
     icon: "📈",
     title: "Displacement-Time & Velocity-Time Graphs",
     subtitle: "Gradient and area rules for motion graphs",
@@ -88,6 +89,7 @@ $$s = \\tfrac{1}{2}(u + v)t$$`,
   },
   {
     id: "suvat",
+    videoUrl: "https://www.youtube.com/watch?v=TAJDierW87g",
     icon: "s",
     title: "SUVAT Equations",
     subtitle: "Five equations for constant acceleration",
@@ -159,6 +161,7 @@ Always **define a positive direction** at the start of the solution and apply it
   },
   {
     id: "vertical-motion",
+    videoUrl: "https://www.youtube.com/watch?v=cYrmYMaewRc",
     icon: "g",
     title: "Vertical Motion Under Gravity",
     subtitle: "Projectiles with g = 9.8 m/s² downward",

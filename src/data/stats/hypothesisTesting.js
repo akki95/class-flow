@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "hypothesis-framework",
+    videoUrl: "https://www.youtube.com/watch?v=_U6x8TnbbWk",
     icon: "H",
     title: "Hypothesis Testing Framework",
     subtitle: "H₀, H₁, significance levels and errors",
@@ -69,6 +70,7 @@ $$\\text{p-value} < \\alpha \\quad \\Rightarrow \\quad \\text{reject } H_0$$`,
   },
   {
     id: "one-tailed-tests",
+    videoUrl: "https://www.youtube.com/watch?v=EOgpWUJVg5A",
     icon: "→",
     title: "One-Tailed Tests",
     subtitle: "Testing for increase or decrease using binomial",
@@ -120,6 +122,7 @@ The **actual significance level** is $P(\\text{critical region under } H_0)$, wh
   },
   {
     id: "two-tailed-tests",
+    videoUrl: "https://www.youtube.com/watch?v=nc4q-OF--Uo",
     icon: "⟺",
     title: "Two-Tailed Tests",
     subtitle: "Testing for any change using both tails",

@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "straight-lines",
+    videoUrl: "https://www.youtube.com/watch?v=kJBUJQXw6J4",
     icon: "/",
     title: "Straight Lines",
     subtitle: "Gradient, equation, midpoint, distance",
@@ -73,6 +74,7 @@ $$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$`,
   },
   {
     id: "circles",
+    videoUrl: "https://www.youtube.com/watch?v=zYcXzpdmmMk",
     icon: "○",
     title: "Circles",
     subtitle: "Equation of a circle, tangents, chords",

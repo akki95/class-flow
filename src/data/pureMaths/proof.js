@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "types-of-proof",
+    videoUrl: "https://www.youtube.com/watch?v=liojZ2wedyI",
     icon: "✓",
     title: "Types of Proof",
     subtitle: "Deduction, exhaustion, counter-example",
@@ -72,6 +73,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "proof-by-deduction",
+    videoUrl: "https://www.youtube.com/watch?v=liojZ2wedyI",
     icon: "⊢",
     title: "Proof by Deduction",
     subtitle: "Algebraic and logical argument",
@@ -154,6 +156,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "counter-example",
+    videoUrl: null,
     icon: "✗",
     title: "Disproof by Counter-example",
     subtitle: "One example to disprove a conjecture",

@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "exponential-functions",
+    videoUrl: "https://www.youtube.com/watch?v=lKl67oxtuhE",
     icon: "eˣ",
     title: "Exponential Functions",
     subtitle: "Properties and graphs of aˣ",
@@ -72,6 +73,7 @@ $$N = N_0 e^{kt}$$
   },
   {
     id: "laws-of-logs",
+    videoUrl: "https://www.youtube.com/watch?v=4oRHOsWR-JI",
     icon: "log",
     title: "Laws of Logarithms",
     subtitle: "log(ab), log(a/b), log(aⁿ)",
@@ -128,6 +130,7 @@ $$\\log_a x = \\frac{\\log_b x}{\\log_b a}$$
   },
   {
     id: "natural-log",
+    videoUrl: "https://www.youtube.com/watch?v=ThWB-z6bheo",
     icon: "ln",
     title: "The Natural Logarithm",
     subtitle: "ln x and its properties",
@@ -181,6 +184,7 @@ $$\\ln 1 = 0, \\quad \\ln e = 1, \\quad \\ln\\!\\left(\\tfrac{1}{x}\\right) = -\
   },
   {
     id: "solving-exp-log",
+    videoUrl: "https://www.youtube.com/watch?v=w2b99d9sFBw",
     icon: "=",
     title: "Solving Exponential & Log Equations",
     subtitle: "Apply logs to solve equations",

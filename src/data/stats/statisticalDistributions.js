@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "discrete-random-variables",
+    videoUrl: "https://www.youtube.com/watch?v=JsL1cowjxTE",
     icon: "X",
     title: "Discrete Random Variables",
     subtitle: "Probability distributions, E(X) and Var(X)",
@@ -68,6 +69,7 @@ If $Y = aX + b$ for constants $a$ and $b$, then:
   },
   {
     id: "binomial-distribution",
+    videoUrl: "https://www.youtube.com/watch?v=8AY2ufFuYvA",
     icon: "B",
     title: "The Binomial Distribution",
     subtitle: "B(n,p): conditions, formula and probabilities",
@@ -122,6 +124,7 @@ At AS Level you are expected to use your calculator's built-in binomial probabil
   },
   {
     id: "cumulative-binomial",
+    videoUrl: "https://www.youtube.com/watch?v=bySTtR4RKkg",
     icon: "Σ",
     title: "Cumulative Binomial Probabilities",
     subtitle: "P(X≤k), P(X<k), P(X>k) and calculator use",

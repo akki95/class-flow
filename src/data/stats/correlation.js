@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "scatter-diagrams",
+    videoUrl: "https://www.youtube.com/watch?v=yvwtNh4AOEo",
     icon: "·",
     title: "Scatter Diagrams",
     subtitle: "Plotting, correlation types and strength",
@@ -88,6 +89,7 @@ Even if two variables are strongly correlated, this does not mean that one cause
   },
   {
     id: "pmcc",
+    videoUrl: "https://www.youtube.com/watch?v=BMrrgKWpF_I",
     icon: "r",
     title: "Product Moment Correlation Coefficient",
     subtitle: "Pearson's r: measuring linear correlation strength",
@@ -194,6 +196,7 @@ In exam questions you will usually be given the values of $S_{xy}$, $S_{xx}$, an
   },
   {
     id: "linear-regression",
+    videoUrl: "https://www.youtube.com/watch?v=vQ43q_iIdBY",
     icon: "y=a+bx",
     title: "Linear Regression",
     subtitle: "Least squares regression line and interpretation",

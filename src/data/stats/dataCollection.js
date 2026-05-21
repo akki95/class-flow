@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "populations-samples",
+    videoUrl: "https://www.youtube.com/watch?v=cFqLQ9965So",
     icon: "👥",
     title: "Populations & Samples",
     subtitle: "Census vs sample, advantages and disadvantages",
@@ -78,6 +79,7 @@ $$\text{Sampling fraction} = \frac{\text{Sample size}}{\text{Population size}}$$
   },
   {
     id: "sampling-methods",
+    videoUrl: "https://www.youtube.com/watch?v=oZNsts7d634",
     icon: "🎲",
     title: "Sampling Methods",
     subtitle: "Simple random, stratified, systematic, opportunity",
@@ -157,6 +159,7 @@ The sample consists of those most readily available to the researcher. This is q
   },
   {
     id: "types-of-data",
+    videoUrl: "https://www.youtube.com/watch?v=0nG6jmeiwl4",
     icon: "📊",
     title: "Types of Data",
     subtitle: "Qualitative, quantitative, discrete, continuous",

@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "first-principles",
+    videoUrl: "https://www.youtube.com/watch?v=JvThxP47e_U",
     icon: "lim",
     title: "First Principles",
     subtitle: "Definition of the derivative",
@@ -72,6 +73,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "diff-polynomials",
+    videoUrl: "https://www.youtube.com/watch?v=pMWsP9xbcgY",
     icon: "d/dx",
     title: "Differentiating Polynomials",
     subtitle: "Power rule, sums and differences",
@@ -135,6 +137,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "tangents-normals",
+    videoUrl: "https://www.youtube.com/watch?v=cvQldby4e0Q",
     icon: "/",
     title: "Tangents & Normals",
     subtitle: "Equations of tangent and normal lines",
@@ -203,6 +206,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "stationary-points",
+    videoUrl: "https://www.youtube.com/watch?v=F9rZ3Hl7-zY",
     icon: "⊔",
     title: "Stationary Points",
     subtitle: "Finding and classifying turning points",
@@ -278,6 +282,7 @@ export const CHAPTER_TOPICS = [
   },
   {
     id: "second-derivative",
+    videoUrl: "https://www.youtube.com/watch?v=F9rZ3Hl7-zY",
     icon: "d²",
     title: "Second Derivative",
     subtitle: "Concavity and the second derivative test",

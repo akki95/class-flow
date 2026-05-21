@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "histograms",
+    videoUrl: "https://www.youtube.com/watch?v=vs4sr2lCwus",
     icon: "▦",
     title: "Histograms",
     subtitle: "Frequency density, unequal class widths",
@@ -99,6 +100,7 @@ When all class widths are **equal**, frequency density is proportional to freque
   },
   {
     id: "box-plots-outliers",
+    videoUrl: "https://www.youtube.com/watch?v=nzHErW88jdY",
     icon: "⊟",
     title: "Box Plots & Outliers",
     subtitle: "Q1, Q3, IQR, whiskers, outliers",
@@ -188,6 +190,7 @@ $$\\text{Below } Q_1 - 1.5 \\times \\text{IQR} \\quad \\text{or} \\quad \\text{A
   },
   {
     id: "cumulative-frequency",
+    videoUrl: "https://www.youtube.com/watch?v=vrohS8fGcVw",
     icon: "∫",
     title: "Cumulative Frequency",
     subtitle: "Cumulative frequency curves, quartiles and median",
@@ -278,6 +281,7 @@ The IQR can be read off as $Q_3 - Q_1$.
   },
   {
     id: "comparing-distributions",
+    videoUrl: "https://www.youtube.com/watch?v=I9t0nJ_e66w",
     icon: "⇔",
     title: "Comparing Distributions",
     subtitle: "Comparing location and spread in context",

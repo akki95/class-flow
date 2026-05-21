@@ -243,7 +243,18 @@ function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone
   const { T } = useTheme();
   const VizComponent = topic.visualization ? vizMap[topic.visualization] : null;
   const scrollRef = useRef(null);
-  const sidebarWidth = activeTool === "geogebra" ? 460 : activeTool === "desmos" ? 420 : 0;
+  const [showTopicVideo, setShowTopicVideo] = useState(false);
+  const videoSidebarOpen = activeTool === "geogebra" || activeTool === "desmos" || showTopicVideo;
+  const sidebarWidth = activeTool === "geogebra" ? 460 : (activeTool === "desmos" || showTopicVideo) ? 480 : 0;
+
+  const handleToolClick = (id) => {
+    setShowTopicVideo(false);
+    setActiveTool(prev => prev === id ? null : id);
+  };
+  const handleVideoClick = () => {
+    setActiveTool(null);
+    setShowTopicVideo(v => !v);
+  };
 
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [topicIdx]);
 
@@ -274,11 +285,16 @@ function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone
             <h2 style={{ color: T.text, fontSize: 22, fontWeight: 800, margin: 0, letterSpacing: "-0.01em" }}>{topic.title}</h2>
             <div style={{ color: topic.color, fontSize: 13, marginTop: 4, fontWeight: 500, opacity: 0.9 }}>{topic.subtitle}</div>
           </div>
-          <div style={{ display: "flex", gap: 8, marginLeft: "auto", flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: 8, marginLeft: "auto", flexShrink: 0, flexWrap: "wrap" }}>
+            {topic.videoUrl && (
+              <button onClick={handleVideoClick} style={{ border: `1px solid ${showTopicVideo ? "#e03131" : "#ff000028"}`, borderRadius: 8, padding: "8px 14px", cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Segoe UI', sans-serif", transition: "all 0.18s", background: showTopicVideo ? "#e03131" : "#ff000010", color: showTopicVideo ? "white" : "#e03131" }}>
+                ▶ Watch Topic
+              </button>
+            )}
             {[{ id: "desmos", label: "📐 Desmos" }, { id: "geogebra", label: "📊 GeoGebra" }].map(({ id, label }) => {
               const active = activeTool === id;
               return (
-                <button key={id} onClick={() => setActiveTool(active ? null : id)} style={{ border: `1px solid ${active ? topic.color : T.borderMid}`, borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 12, fontWeight: 600, fontFamily: "'Segoe UI', sans-serif", transition: "all 0.18s", background: active ? topic.color : T.surface, color: active ? "#04120d" : T.label }}>
+                <button key={id} onClick={() => handleToolClick(id)} style={{ border: `1px solid ${active ? topic.color : T.borderMid}`, borderRadius: 8, padding: "8px 16px", cursor: "pointer", fontSize: 12, fontWeight: 600, fontFamily: "'Segoe UI', sans-serif", transition: "all 0.18s", background: active ? topic.color : T.surface, color: active ? "#04120d" : T.label }}>
                   {label}
                 </button>
               );
@@ -310,6 +326,7 @@ function TopicView({ topic, topicIdx, topics, onBack, onNext, onPrev, onMarkDone
 
       <DesmosSidebar isOpen={activeTool === "desmos"} onClose={() => setActiveTool(null)} expressions={topic.desmosExpressions} note={topic.desmosNote} />
       <GeoGebraSidebar isOpen={activeTool === "geogebra"} onClose={() => setActiveTool(null)} />
+      <VideoModal videoUrl={topic.videoUrl} title={topic.title} isOpen={showTopicVideo} onClose={() => setShowTopicVideo(false)} />
     </div>
   );
 }

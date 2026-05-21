@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "basic-probability",
+    videoUrl: "https://www.youtube.com/watch?v=KpdYeRt1_TI",
     icon: "P",
     title: "Basic Probability",
     subtitle: "Sample spaces and probability rules",
@@ -62,6 +63,7 @@ The term $P(A \\cap B)$ is subtracted because outcomes in both A and B are count
   },
   {
     id: "venn-diagrams",
+    videoUrl: "https://www.youtube.com/watch?v=K7-t0A8ap6M",
     icon: "⊆",
     title: "Venn Diagrams",
     subtitle: "Union, intersection and complement",
@@ -117,6 +119,7 @@ When filling in a Venn diagram always start with the innermost region ($A \\cap 
   },
   {
     id: "tree-diagrams",
+    videoUrl: "https://www.youtube.com/watch?v=lOOGKlURO08",
     icon: "🌲",
     title: "Tree Diagrams",
     subtitle: "Sequential events and combined probability",
@@ -166,6 +169,7 @@ This combination of multiplying along and adding across is the core technique fo
   },
   {
     id: "mut-exc-independent",
+    videoUrl: "https://www.youtube.com/watch?v=BSKv5rRCv1I",
     icon: "⊥",
     title: "Mutually Exclusive & Independent Events",
     subtitle: "Testing independence and mutual exclusivity",
@@ -216,6 +220,7 @@ An equivalent condition is $P(A|B) = P(A)$ — knowing B occurred gives no infor
   },
   {
     id: "conditional-probability",
+    videoUrl: "https://www.youtube.com/watch?v=44VHj-LklgU",
     icon: "P|",
     title: "Conditional Probability",
     subtitle: "P(A|B) and Bayes' approach",

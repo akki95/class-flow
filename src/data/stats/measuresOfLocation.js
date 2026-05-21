@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "central-tendency",
+    videoUrl: "https://www.youtube.com/watch?v=gftoj2ojRcs",
     icon: "μ",
     title: "Measures of Central Tendency",
     subtitle: "Mean, median and mode",
@@ -102,6 +103,7 @@ For grouped data, use the **midpoint** of each class as the representative value
   },
   {
     id: "measures-spread",
+    videoUrl: "https://www.youtube.com/watch?v=RtFDVm8PsxQ",
     icon: "σ",
     title: "Measures of Spread",
     subtitle: "Range, IQR, variance and standard deviation",
@@ -197,6 +199,7 @@ A **larger** standard deviation means data values are more spread out from the m
   },
   {
     id: "coding",
+    videoUrl: "https://www.youtube.com/watch?v=9c2q5FXkE7g",
     icon: "≈",
     title: "Coding",
     subtitle: "Linear transformations of data",

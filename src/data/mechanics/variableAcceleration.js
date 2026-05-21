@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "diff-kinematics",
+    videoUrl: "https://www.youtube.com/watch?v=EV6BGpFQY3Q",
     icon: "d/dt",
     title: "Differentiation in Kinematics",
     subtitle: "Velocity and acceleration from displacement",
@@ -75,6 +76,7 @@ Always check that the value of $t$ you find is **non-negative** and within the v
   },
   {
     id: "int-kinematics",
+    videoUrl: "https://www.youtube.com/watch?v=Ot93kS8xQvY",
     icon: "∫dt",
     title: "Integration in Kinematics",
     subtitle: "Finding displacement and velocity by integration",
@@ -136,6 +138,7 @@ Always state the initial conditions you are using, and verify that your answers 
   },
   {
     id: "max-min-kinematics",
+    videoUrl: "https://www.youtube.com/watch?v=cXFxRCJKjbY",
     icon: "⊔",
     title: "Maximum and Minimum Values in Kinematics",
     subtitle: "Finding extreme values of displacement and velocity",

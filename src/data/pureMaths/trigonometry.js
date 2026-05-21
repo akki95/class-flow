@@ -13,6 +13,7 @@ export const CHAPTER_META = {
 export const CHAPTER_TOPICS = [
   {
     id: "sine-cosine-rule",
+    videoUrl: "https://www.youtube.com/watch?v=PJJReQUkfOQ",
     icon: "△",
     title: "Sine & Cosine Rule",
     subtitle: "Non-right-angled triangles",
@@ -72,6 +73,7 @@ $$\\text{Area} = \\frac{1}{2}ab\\sin C$$
   },
   {
     id: "trig-ratios",
+    videoUrl: "https://www.youtube.com/watch?v=O6m4alSvOyc",
     icon: "θ",
     title: "Trig Ratios & Exact Values",
     subtitle: "SOHCAHTOA and exact values",
@@ -121,6 +123,7 @@ These come from the 30-60-90 and 45-45-90 special triangles.`,
   },
   {
     id: "radians",
+    videoUrl: "https://www.youtube.com/watch?v=p3doZ87PG9w",
     icon: "rad",
     title: "Radians, Arc Length & Sector Area",
     subtitle: "Converting, arc length, sector area",
@@ -174,6 +177,7 @@ $$A_{\\text{segment}} = \\frac{1}{2}r^2\\theta - \\frac{1}{2}r^2\\sin\\theta = \
   },
   {
     id: "trig-identities",
+    videoUrl: "https://www.youtube.com/watch?v=Dg5fGWv2-eA",
     icon: "≡",
     title: "Trigonometric Identities",
     subtitle: "Pythagorean identities",
@@ -222,6 +226,7 @@ $$\\tan\\theta \\equiv \\frac{\\sin\\theta}{\\cos\\theta}$$
   },
   {
     id: "trig-equations",
+    videoUrl: "https://www.youtube.com/watch?v=8spZW7G6yV0",
     icon: "π",
     title: "Trigonometric Equations",
     subtitle: "Solving equations in given intervals",
