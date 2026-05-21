@@ -34,6 +34,7 @@ function ChapterGrid({ onSelect }) {
   };
 
   return (
+    <>
     <div style={st.container}>
       <div style={st.card}>
         {/* Header */}
@@ -82,6 +83,7 @@ function ChapterGrid({ onSelect }) {
       </div>
     </div>
     {activeVideo && <VideoModal videoUrl={activeVideo.url} title={activeVideo.title} onClose={() => setActiveVideo(null)} />}
+    </>
   );
 }
 
