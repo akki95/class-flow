@@ -66,13 +66,14 @@ const LEVELS = [
     ],
   },
   {
-    id: "coming",
-    label: "Coming soon",
-    tag: "",
-    desc: "",
-    color: "#64748b",
+    id: "igcse-cambridge",
+    label: "Cambridge IGCSE",
+    tag: "Grades 10–11 · International",
+    desc: "Cambridge 0580 · Core & Extended",
+    color: "#3ecfaa",
     subjects: [
-      { id: "igcse", icon: "🌍", title: "IGCSE Cambridge", desc: "Cambridge International · Core & Extended", accent: "#64748b", route: null },
+      { id: "camb-core", icon: "📘", title: "IGCSE Core", desc: "Grades C–G · Number, Algebra, Geometry, Statistics & Probability", accent: "#6366f1", route: "/igcse/cambridge" },
+      { id: "camb-ext", icon: "📗", title: "IGCSE Extended", desc: "Grades A*–C · Surds, Quadratics, Functions, Trig, Circle Theorems, Vectors", accent: "#10b981", route: "/igcse/cambridge" },
     ],
   },
 ];
