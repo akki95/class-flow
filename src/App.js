@@ -18,6 +18,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import HomeworkManager from "./pages/HomeworkManager";
 import SequencesFlow from "./pages/SequencesFlow";
 import { ThemeProvider } from "./context/ThemeContext";
+import { ProgressProvider } from "./context/ProgressContext";
 import FeedbackWidget from "./components/FeedbackWidget";
 import PureMathsHome from "./pages/PureMathsHome";
 import StatsHome from "./pages/StatsHome";
@@ -116,6 +117,7 @@ export default function App() {
   };
 
   return (
+    <ProgressProvider>
     <ThemeProvider>
     <Router>
       <Routes>
@@ -143,5 +145,6 @@ export default function App() {
     </Router>
     <Analytics />
     </ThemeProvider>
+    </ProgressProvider>
   );
 }

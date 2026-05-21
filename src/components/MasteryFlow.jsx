@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MathText from "./MathText";
 import { useTheme, ThemeToggle, DARK } from "../context/ThemeContext";
+import { useProgress } from "../context/ProgressContext";
 import VideoModal from "./VideoModal";
 
 // Back-compat: pages that import CF directly get the dark palette as a static fallback.
@@ -181,7 +182,10 @@ function Section({ title, icon, children }) {
 // ─── Agenda ────────────────────────────────────────────────────────────────────
 function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
   const { T } = useTheme();
+  const { daysSinceVisit } = useProgress();
   const [showVideo, setShowVideo] = useState(false);
+  const doneCount = topics.filter(t => completed.has(t.id)).length;
+  const hasProgress = doneCount > 0;
   return (
     <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', sans-serif", padding: 24, paddingRight: showVideo ? "504px" : 24, transition: "padding-right 0.3s ease" }}>
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "40px 44px", width: "100%", maxWidth: 820, color: T.text, boxShadow: T.pageShadow }}>
@@ -223,14 +227,27 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
                 </div>
                 <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 3, color: T.text }}>{topic.title}</div>
                 <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.4 }}>{topic.subtitle}</div>
+                {(() => {
+                  const days = daysSinceVisit(topic.id);
+                  if (done && days !== null && days >= 7) return (
+                    <div style={{ marginTop: 5, fontSize: 10, fontWeight: 700, color: "#f59e0b", background: "#f59e0b15", borderRadius: 4, padding: "2px 6px", display: "inline-block" }}>
+                      ↻ Review ({days}d ago)
+                    </div>
+                  );
+                  return null;
+                })()}
               </button>
             );
           })}
         </div>
 
-        <div style={{ textAlign: "center", marginTop: 32 }}>
-          <button onClick={() => onStart(0)} style={{ border: "none", borderRadius: 9, padding: "13px 42px", cursor: "pointer", background: T.green, color: "#04120d", fontSize: 15, fontWeight: 700, fontFamily: "'Segoe UI', sans-serif" }}>
-            {completed.size > 0 ? "Continue →" : "Start Learning →"}
+        <div style={{ textAlign: "center", marginTop: 32, display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
+          <button onClick={() => {
+            // Resume from first incomplete topic
+            const firstIncomplete = topics.findIndex(t => !completed.has(t.id));
+            onStart(firstIncomplete >= 0 ? firstIncomplete : 0);
+          }} style={{ border: "none", borderRadius: 9, padding: "13px 42px", cursor: "pointer", background: T.green, color: "#04120d", fontSize: 15, fontWeight: 700, fontFamily: "'Segoe UI', sans-serif" }}>
+            {hasProgress ? `Continue → (${doneCount}/${topics.length} done)` : "Start Learning →"}
           </button>
         </div>
       </div>
@@ -353,28 +370,44 @@ function SummaryView({ completed, total, onRestart, onGoAgenda }) {
 
 // ─── Root export ───────────────────────────────────────────────────────────────
 export default function MasteryFlow({ topics, onBack, title, subtitle, vizMap = {}, videoUrl = null }) {
-  const [view, setView]           = useState("agenda");
-  const [topicIdx, setTopicIdx]   = useState(0);
-  const [completed, setCompleted] = useState(new Set());
+  const [view, setView]             = useState("agenda");
+  const [topicIdx, setTopicIdx]     = useState(0);
   const [activeTool, setActiveTool] = useState(null);
 
-  const handleStart    = useCallback((idx) => { setTopicIdx(idx); setActiveTool(null); setView("topic"); }, []);
-  const handleNext     = useCallback(() => {
+  // Persistent progress from localStorage
+  const { getCompletedSet, markTopicComplete, unmarkTopicComplete, markVisited } = useProgress();
+  const completed = getCompletedSet();
+
+  const handleStart = useCallback((idx) => {
+    setTopicIdx(idx);
+    setActiveTool(null);
+    setView("topic");
+    // Track visit
+    if (topics[idx]) markVisited(topics[idx].id);
+  }, [topics, markVisited]);
+
+  const handleNext = useCallback(() => {
     if (topicIdx < topics.length - 1) { setTopicIdx(i => i + 1); setActiveTool(null); }
     else setView("summary");
   }, [topicIdx, topics.length]);
-  const handlePrev     = useCallback(() => { setTopicIdx(i => Math.max(i - 1, 0)); setActiveTool(null); }, []);
+
+  const handlePrev = useCallback(() => { setTopicIdx(i => Math.max(i - 1, 0)); setActiveTool(null); }, []);
+
   const handleMarkDone = useCallback(() => {
-    setCompleted(prev => {
-      const next = new Set(prev);
-      const id = topics[topicIdx].id;
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  }, [topicIdx, topics]);
+    const id = topics[topicIdx].id;
+    if (completed.has(id)) unmarkTopicComplete(id);
+    else markTopicComplete(id);
+  }, [topicIdx, topics, completed, markTopicComplete, unmarkTopicComplete]);
+
+  const handleRestart = useCallback(() => {
+    // Unmark all topics in this chapter
+    topics.forEach(t => unmarkTopicComplete(t.id));
+    setTopicIdx(0);
+    setView("agenda");
+  }, [topics, unmarkTopicComplete]);
 
   if (view === "agenda") return <AgendaView topics={topics} completed={completed} onStart={handleStart} title={title} subtitle={subtitle} videoUrl={videoUrl} />;
-  if (view === "summary") return <SummaryView completed={completed} total={topics.length} onRestart={() => { setCompleted(new Set()); setTopicIdx(0); setView("agenda"); }} onGoAgenda={() => setView("agenda")} />;
+  if (view === "summary") return <SummaryView completed={completed} total={topics.length} onRestart={handleRestart} onGoAgenda={() => setView("agenda")} />;
 
   const topic = topics[topicIdx];
   return (
