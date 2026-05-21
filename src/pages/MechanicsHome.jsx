@@ -81,7 +81,7 @@ function ChapterGrid({ onSelect }) {
         </div>
       </div>
     </div>
-    {activeVideo && <VideoModal videoUrl={activeVideo.url} title={activeVideo.title} onClose={() => setActiveVideo(null)} />}
+    <VideoModal videoUrl={activeVideo?.url} title={activeVideo?.title} isOpen={!!activeVideo} onClose={() => setActiveVideo(null)} />
     </>
   );
 }

@@ -183,7 +183,7 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
   const { T } = useTheme();
   const [showVideo, setShowVideo] = useState(false);
   return (
-    <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', sans-serif", padding: 24 }}>
+    <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', sans-serif", padding: 24, paddingRight: showVideo ? "504px" : 24, transition: "padding-right 0.3s ease" }}>
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "40px 44px", width: "100%", maxWidth: 820, color: T.text, boxShadow: T.pageShadow }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
           <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${T.green}, ${T.green2})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 14, color: "#04120d", flexShrink: 0 }}>CF</div>
@@ -201,7 +201,7 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
               ▶ Watch Overview
             </button>
           )}
-          {showVideo && <VideoModal videoUrl={videoUrl} title={title} onClose={() => setShowVideo(false)} />}
+          <VideoModal videoUrl={videoUrl} title={title} isOpen={showVideo} onClose={() => setShowVideo(false)} />
         </div>
         {subtitle && <p style={{ color: T.sub, fontSize: 14, margin: "0 0 24px", fontWeight: 400, lineHeight: 1.6, marginTop: 6 }}>{subtitle}</p>}
 
