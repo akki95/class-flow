@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MathText from "./MathText";
 import { useTheme, ThemeToggle, DARK } from "../context/ThemeContext";
+import VideoModal from "./VideoModal";
 
 // Back-compat: pages that import CF directly get the dark palette as a static fallback.
 // They should migrate to useTheme() but this prevents import errors in the meantime.
@@ -180,6 +181,7 @@ function Section({ title, icon, children }) {
 // ─── Agenda ────────────────────────────────────────────────────────────────────
 function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
   const { T } = useTheme();
+  const [showVideo, setShowVideo] = useState(false);
   return (
     <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', sans-serif", padding: 24 }}>
       <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "40px 44px", width: "100%", maxWidth: 820, color: T.text, boxShadow: T.pageShadow }}>
@@ -195,10 +197,11 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4, flexWrap: "wrap" }}>
           <h1 style={{ fontSize: 28, fontWeight: 900, margin: 0, color: T.text, letterSpacing: "-0.02em" }}>{title}</h1>
           {videoUrl && (
-            <a href={videoUrl} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 7, background: "#ff000012", border: "1px solid #ff000028", borderRadius: 9, padding: "8px 16px", color: "#e03131", fontWeight: 700, fontSize: 13, textDecoration: "none", flexShrink: 0, fontFamily: "'Segoe UI', sans-serif", whiteSpace: "nowrap" }}>
-              ▶ Watch on YouTube
-            </a>
+            <button onClick={() => setShowVideo(true)} style={{ display: "flex", alignItems: "center", gap: 7, background: "#ff000012", border: "1px solid #ff000028", borderRadius: 9, padding: "8px 16px", color: "#e03131", fontWeight: 700, fontSize: 13, cursor: "pointer", flexShrink: 0, fontFamily: "'Segoe UI', sans-serif", whiteSpace: "nowrap" }}>
+              ▶ Watch Overview
+            </button>
           )}
+          {showVideo && <VideoModal videoUrl={videoUrl} title={title} onClose={() => setShowVideo(false)} />}
         </div>
         {subtitle && <p style={{ color: T.sub, fontSize: 14, margin: "0 0 24px", fontWeight: 400, lineHeight: 1.6, marginTop: 6 }}>{subtitle}</p>}
 

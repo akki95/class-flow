@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MasteryFlow from "../components/MasteryFlow";
+import VideoModal from "../components/VideoModal";
 import { useTheme, ThemeToggle } from "../context/ThemeContext";
 import { MECHANICS_CHAPTERS } from "../data/mechanics/index";
 
@@ -9,6 +10,7 @@ const MECH_ACCENT = "#f97316"; // orange — distinct from Pure (green) and Stat
 function ChapterGrid({ onSelect }) {
   const navigate = useNavigate();
   const { T } = useTheme();
+  const [activeVideo, setActiveVideo] = useState(null);
   const totalTopics = MECHANICS_CHAPTERS.reduce((sum, ch) => sum + ch.topics.length, 0);
 
   const st = {
@@ -66,11 +68,11 @@ function ChapterGrid({ onSelect }) {
                 <div style={st.chTitle}>{meta.title}</div>
                 <div style={st.chSub}>{meta.subtitle}</div>
                 {meta.videoUrl && (
-                  <a href={meta.videoUrl} target="_blank" rel="noopener noreferrer"
-                    onClick={e => e.stopPropagation()}
-                    style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, color: "#e03131", fontSize: 11, fontWeight: 700, textDecoration: "none" }}>
+                  <button
+                    onClick={e => { e.stopPropagation(); setActiveVideo({ url: meta.videoUrl, title: meta.title }); }}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, color: "#e03131", fontSize: 11, fontWeight: 700, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'Segoe UI', sans-serif" }}>
                     ▶ Watch
-                  </a>
+                  </button>
                 )}
               </button>
             );

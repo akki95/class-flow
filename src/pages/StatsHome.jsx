@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MasteryFlow from "../components/MasteryFlow";
+import VideoModal from "../components/VideoModal";
 import { useTheme, ThemeToggle } from "../context/ThemeContext";
 import { STATS_CHAPTERS } from "../data/stats/index";
 
@@ -8,6 +9,7 @@ import { STATS_CHAPTERS } from "../data/stats/index";
 function ChapterGrid({ onSelect }) {
   const navigate = useNavigate();
   const { T } = useTheme();
+  const [activeVideo, setActiveVideo] = useState(null);
   const totalTopics = STATS_CHAPTERS.reduce((sum, ch) => sum + ch.topics.length, 0);
 
   const st = {
@@ -67,11 +69,11 @@ function ChapterGrid({ onSelect }) {
                 <div style={st.chTitle}>{meta.title}</div>
                 <div style={st.chSub}>{meta.subtitle}</div>
                 {meta.videoUrl && (
-                  <a href={meta.videoUrl} target="_blank" rel="noopener noreferrer"
-                    onClick={e => e.stopPropagation()}
-                    style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, color: "#e03131", fontSize: 11, fontWeight: 700, textDecoration: "none" }}>
+                  <button
+                    onClick={e => { e.stopPropagation(); setActiveVideo({ url: meta.videoUrl, title: meta.title }); }}
+                    style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 8, color: "#e03131", fontSize: 11, fontWeight: 700, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'Segoe UI', sans-serif" }}>
                     ▶ Watch
-                  </a>
+                  </button>
                 )}
               </button>
             );
@@ -79,6 +81,7 @@ function ChapterGrid({ onSelect }) {
         </div>
       </div>
     </div>
+    {activeVideo && <VideoModal videoUrl={activeVideo.url} title={activeVideo.title} onClose={() => setActiveVideo(null)} />}
   );
 }
 
