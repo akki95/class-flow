@@ -35,6 +35,14 @@ export default function Demo() {
       accent: "#f97316",
       route: "/igcse/edexcel/mechanics",
     },
+    {
+      id: "past-papers",
+      icon: "📄",
+      title: "Past Papers",
+      desc: "2018–2024 · Pure, Stats & Mechanics · Question papers, model answers and mark schemes",
+      accent: "#f59e0b",
+      route: "/igcse/edexcel/past-papers",
+    },
   ];
 
   const pageGradient = isDark
