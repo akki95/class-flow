@@ -106,13 +106,30 @@ export default function Demo() {
       </div>
 
       {/* Hero */}
-      <div style={{ textAlign: "center", padding: "52px 24px 40px", maxWidth: 620, margin: "0 auto" }}>
+      <div style={{ textAlign: "center", padding: "52px 24px 32px", maxWidth: 680, margin: "0 auto" }}>
         <h1 style={{ fontSize: 38, fontWeight: 900, lineHeight: 1.2, margin: "0 0 16px", color: T.text, letterSpacing: "-0.03em" }}>
           Every Maths topic.<br />Theory to practice.
         </h1>
-        <p style={{ color: T.sub, fontSize: 15, lineHeight: 1.8, margin: 0 }}>
+        <p style={{ color: T.sub, fontSize: 15, lineHeight: 1.8, margin: "0 0 28px" }}>
           Theory · Formulas · Worked examples · Practice questions · Bicen Maths videos · Desmos & GeoGebra — all in one place.
         </p>
+        {/* Core belief */}
+        <div style={{
+          background: T.greenBg,
+          border: `1px solid ${T.greenBorder}`,
+          borderRadius: 14, padding: "18px 24px",
+          display: "inline-block", maxWidth: 580,
+        }}>
+          <p style={{
+            color: T.green, fontSize: 14, lineHeight: 1.7, margin: 0,
+            fontStyle: "italic", fontWeight: 500,
+          }}>
+            "A student has <strong style={{ fontStyle: "normal" }}>learned</strong> something when they can transfer it to an unfamiliar context, accurately, without hints, and still get it right a week later."
+          </p>
+          <div style={{ color: T.muted, fontSize: 11, marginTop: 8, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+            The ClassFlow standard
+          </div>
+        </div>
       </div>
 
       {/* Levels */}
