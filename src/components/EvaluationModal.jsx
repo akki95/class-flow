@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useProgress } from "../context/ProgressContext";
-import { generateEvaluation } from "../utils/generateEvaluation";
+import { getEvaluationQuestions } from "../utils/evaluationCache";
 import MathText from "./MathText";
 
 const LAYERS = ["recall", "procedure", "spotMistake", "transfer"];
@@ -246,7 +246,7 @@ export default function EvaluationModal({ topic, onClose }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    generateEvaluation(topic)
+    getEvaluationQuestions(topic)
       .then(q => { setQuestions(q); setState("active"); })
       .catch(e => { setError(e.message); setState("error"); });
   }, [topic]);
@@ -315,9 +315,9 @@ export default function EvaluationModal({ topic, onClose }) {
         <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
           {state === "loading" && (
             <div style={{ textAlign: "center", padding: "40px 0" }}>
-              <div style={{ fontSize: 32, marginBottom: 12 }}>⚡</div>
-              <div style={{ color: T.text, fontWeight: 700, marginBottom: 6 }}>Generating your evaluation...</div>
-              <div style={{ color: T.muted, fontSize: 13 }}>AI is creating personalised questions for this topic.</div>
+              <div style={{ fontSize: 32, marginBottom: 12, animation: "spin 1s linear infinite" }}>⚡</div>
+              <div style={{ color: T.text, fontWeight: 700, marginBottom: 6 }}>Loading your evaluation...</div>
+              <div style={{ color: T.muted, fontSize: 13 }}>Fetching questions for this topic.</div>
             </div>
           )}
 

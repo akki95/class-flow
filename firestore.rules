@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Existing session data — authenticated users only
+    match /sessions/{sessionId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // User profiles — owner only
+    match /USERS/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Curricula content — public read, admin write
+    match /curricula/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ── Evaluation question cache ──────────────────────────────────────────────
+    // Public read (any student can load cached questions)
+    // Create only if document doesn't exist yet (first-write-wins, prevents tampering)
+    // No updates or deletes from client
+    match /evaluations/{topicId} {
+      allow read: if true;
+      allow create: if !exists(/databases/$(database)/documents/evaluations/$(topicId));
+      allow update, delete: if false;
+    }
+
+    // Feedback from users — public write (anyone can submit), admin read
+    match /feedback/{docId} {
+      allow create: if true;
+      allow read: if request.auth != null;
+    }
+  }
+}
