@@ -23,6 +23,7 @@ import PureMathsHome from "./pages/PureMathsHome";
 import StatsHome from "./pages/StatsHome";
 import MechanicsHome from "./pages/MechanicsHome";
 import PastPapersHome from "./pages/PastPapersHome";
+import GCSEHome from "./pages/GCSEHome";
 import Demo from "./pages/Demo";
 
 export default function App() {
@@ -131,6 +132,8 @@ export default function App() {
         <Route path="/igcse/edexcel/stats" element={<><StatsHome /><FeedbackWidget userEmail={user?.email} /></>} />
         <Route path="/igcse/edexcel/mechanics" element={<><MechanicsHome /><FeedbackWidget userEmail={user?.email} /></>} />
         <Route path="/igcse/edexcel/past-papers" element={<PastPapersHome />} />
+        <Route path="/gcse" element={<GCSEHome />} />
+        <Route path="/gcse/higher" element={<GCSEHome />} />
       </Routes>
     </Router>
     <Analytics />

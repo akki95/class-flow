@@ -12,6 +12,14 @@ export default function Demo() {
 
   const subjects = [
     {
+      id: "gcse",
+      icon: "📗",
+      title: "GCSE Maths Higher",
+      desc: "Edexcel 1MA1 · Grades 4–9 · Number, Algebra, Geometry, Statistics & Probability",
+      accent: "#10b981",
+      route: "/gcse",
+    },
+    {
       id: "pure",
       icon: "∂",
       title: "Pure Mathematics",
