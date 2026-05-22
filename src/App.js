@@ -12,6 +12,8 @@ import WhatSATScoreDoINeed from "./pages/WhatSATScoreDoINeed";
 import DiagnosticHome from "./pages/DiagnosticHome";
 import SATDiagnostic from "./pages/SATDiagnostic";
 import DiagnosticReport from "./pages/DiagnosticReport";
+import IGCSEDiagnosticComingSoon from "./pages/IGCSEDiagnosticComingSoon";
+import LessonsHome from "./pages/LessonsHome";
 import Login from "./pages/Login";
 import SmartStudentView from "./pages/SmartStudentView";
 import IGCSEStudentView from "./pages/IGCSEStudentView";
@@ -138,7 +140,9 @@ export default function App() {
         <Route path="/what-sat-score-do-i-need" element={<WhatSATScoreDoINeed user={user} />} />
         <Route path="/diagnostic" element={<DiagnosticHome user={user} />} />
         <Route path="/diagnostic/sat" element={<SATDiagnostic user={user} />} />
+        <Route path="/diagnostic/igcse" element={<IGCSEDiagnosticComingSoon user={user} />} />
         <Route path="/diagnostic/report/:attemptId" element={<DiagnosticReport user={user} />} />
+        <Route path="/lessons" element={<LessonsHome user={user} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/demo" element={<Demo />} />
 

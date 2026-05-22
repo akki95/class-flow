@@ -32,7 +32,7 @@ export default function Navbar({ user }) {
   const navLinks = (
     <>
       <Link to="/diagnostic" style={linkStyle("/diagnostic")}>Diagnostic</Link>
-      <Link to="/sat" style={linkStyle("/sat")}>Lessons</Link>
+      <Link to="/lessons" style={linkStyle("/lessons")}>Lessons</Link>
       <Link to="/blog" style={linkStyle("/blog")}>Blog</Link>
     </>
   );

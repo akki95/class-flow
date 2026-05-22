@@ -87,7 +87,7 @@ export default function DiagnosticHome({ user }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
             {[
               { icon: "⏱️", title: "15 minutes",       desc: "Timed to match real SAT conditions" },
-              { icon: "🔒", title: "No account needed", desc: "Just enter your email to unlock the report" },
+              { icon: "🔒", title: "No account needed", desc: "No signup, no credit card — completely free" },
               { icon: "🤖", title: "AI-powered report", desc: "Gemini analyses your behavioural patterns" },
               { icon: "📚", title: "Lesson links",      desc: "Report links directly to relevant lessons" },
             ].map((item, i) => (
