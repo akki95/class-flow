@@ -320,6 +320,32 @@ export default function DiagnosticReport({ user }) {
               </div>
             </div>
 
+            {/* ── Save progress CTA (for non-logged-in users) ── */}
+            {!user && (
+              <div style={{
+                background: T.card, border: `2px solid #6366f1`,
+                borderRadius: 14, padding: "20px 24px", marginBottom: 16,
+                display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16,
+              }}>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: T.text, marginBottom: 4 }}>
+                    💾 Save this report to your account
+                  </div>
+                  <div style={{ fontSize: 13, color: T.sub }}>
+                    Create a free account to track your progress, compare retakes and see how your score improves over time.
+                  </div>
+                </div>
+                <Link to="/login" style={{
+                  background: "linear-gradient(135deg,#6366f1,#4f46e5)",
+                  color: "white", textDecoration: "none",
+                  padding: "10px 22px", borderRadius: 10, fontSize: 14, fontWeight: 700,
+                  whiteSpace: "nowrap", boxShadow: "0 4px 12px rgba(99,102,241,0.3)",
+                }}>
+                  Create Free Account →
+                </Link>
+              </div>
+            )}
+
             {/* ── CTA ── */}
             <div style={{
               background: "linear-gradient(135deg, #1aa38a, #0d8f77)",
