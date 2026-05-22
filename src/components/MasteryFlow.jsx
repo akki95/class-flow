@@ -114,7 +114,8 @@ export function ExampleCard({ example, color }) {
         </button>
       ) : (
         <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 18 }}>
-          {example.steps.map((step, i) => (
+          {/* Steps array format (IGCSE/A-Level) */}
+          {Array.isArray(example.steps) && example.steps.map((step, i) => (
             <div key={i} style={{ display: "flex", gap: 14, marginBottom: 14 }}>
               {step.label && <div style={{ width: 6, minWidth: 6, height: 6, borderRadius: "50%", background: color, marginTop: 9, flexShrink: 0, opacity: 0.9 }} />}
               <div style={{ flex: 1 }}>
@@ -125,6 +126,12 @@ export function ExampleCard({ example, color }) {
               </div>
             </div>
           ))}
+          {/* Plain text solution format (SAT) */}
+          {!Array.isArray(example.steps) && example.solution && (
+            <div style={{ background: T.equation, border: `1px solid ${T.border}`, borderRadius: 10, padding: "14px 18px", marginBottom: 10, color: T.text, fontSize: 14, lineHeight: 1.9 }}>
+              <MathText text={example.solution} />
+            </div>
+          )}
           <button onClick={() => setRevealed(false)} style={{ background: "transparent", border: `1px solid ${T.border}`, borderRadius: 8, padding: "8px 18px", cursor: "pointer", fontSize: 13, fontWeight: 600, color: T.muted, fontFamily: "'Segoe UI', sans-serif", marginTop: 6 }}>
             Hide Solution ▲
           </button>
@@ -137,11 +144,16 @@ export function ExampleCard({ example, color }) {
 export function PracticeCard({ practice, color }) {
   const { T } = useTheme();
   const [show, setShow] = useState(false);
+
+  // Handle SAT array format — use first question
+  const item = Array.isArray(practice) ? practice[0] : practice;
+  if (!item) return null;
+
   return (
     <div style={{ background: T.card, border: `1px solid ${T.borderMid}`, borderTop: `2px solid ${color}`, borderRadius: 14, padding: "20px 22px", boxShadow: T.cardShadow }}>
       <div style={{ color: color, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14, opacity: 0.9 }}>Practice Question</div>
       <div style={{ color: T.text, fontSize: 17, lineHeight: 1.95, fontWeight: 500, marginBottom: 20 }}>
-        <MathText text={practice.question} />
+        <MathText text={item.question} />
       </div>
       {!show ? (
         <button onClick={() => setShow(true)} style={{ border: "none", borderRadius: 9, padding: "11px 26px", cursor: "pointer", fontWeight: 700, fontSize: 14, fontFamily: "'Segoe UI', sans-serif", background: color, color: "#04120d" }}>
@@ -150,14 +162,21 @@ export function PracticeCard({ practice, color }) {
       ) : (
         <>
           <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 18, marginBottom: 14 }}>
-            {practice.solution.map((item, i) => (
+            {/* Steps array format (IGCSE/A-Level) */}
+            {Array.isArray(item.solution) && item.solution.map((s, i) => (
               <div key={i} style={{ marginBottom: 14 }}>
-                {item.step && <div style={{ color: T.label, fontSize: 13, fontWeight: 600, marginBottom: 8, lineHeight: 1.4 }}>{item.step}</div>}
+                {s.step && <div style={{ color: T.label, fontSize: 13, fontWeight: 600, marginBottom: 8, lineHeight: 1.4 }}>{s.step}</div>}
                 <div style={{ background: T.equation, border: `1px solid ${T.border}`, borderRadius: 10, padding: "12px 18px" }}>
-                  <MathText text={`$$${item.math}$$`} />
+                  <MathText text={`$$${s.math}$$`} />
                 </div>
               </div>
             ))}
+            {/* Plain text solution format (SAT) */}
+            {!Array.isArray(item.solution) && item.solution && (
+              <div style={{ background: T.equation, border: `1px solid ${T.border}`, borderRadius: 10, padding: "14px 18px", color: T.text, fontSize: 14, lineHeight: 1.9 }}>
+                <MathText text={item.solution} />
+              </div>
+            )}
           </div>
           <button onClick={() => setShow(false)} style={{ background: "transparent", border: `1px solid ${T.border}`, borderRadius: 8, padding: "9px 20px", cursor: "pointer", fontSize: 13, fontWeight: 600, color: T.muted, fontFamily: "'Segoe UI', sans-serif" }}>
             Hide Solution ▲
