@@ -27,6 +27,7 @@ import PastPapersHome from "./pages/PastPapersHome";
 import GCSEHome from "./pages/GCSEHome";
 import ALevelHome from "./pages/ALevelHome";
 import CambridgeIGCSEHome from "./pages/CambridgeIGCSEHome";
+import SATHome from "./pages/SATHome";
 import Demo from "./pages/Demo";
 
 export default function App() {
@@ -141,6 +142,7 @@ export default function App() {
         <Route path="/alevel" element={<ALevelHome />} />
         <Route path="/alevel/year2" element={<ALevelHome />} />
         <Route path="/igcse/cambridge" element={<CambridgeIGCSEHome />} />
+        <Route path="/sat" element={<SATHome />} />
       </Routes>
     </Router>
     <Analytics />
