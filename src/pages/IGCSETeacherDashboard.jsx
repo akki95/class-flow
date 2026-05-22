@@ -189,7 +189,7 @@ const startSession = async () => {
       <div style={styles.startCard}>
         <div style={styles.logoRow}>
           <div style={styles.logoIcon}>CF</div>
-          <div style={styles.logoName}>ClassFlow</div>
+          <div style={styles.logoName}>ScoreQuanta</div>
         </div>
         <h2 style={{ color: "white", marginBottom: 8 }}>
           {chapter.title || chapter.id}
@@ -220,7 +220,7 @@ const startSession = async () => {
       <div style={styles.header}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={styles.logoIcon}>CF</div>
-          <span style={{ color: "white", fontWeight: 700 }}>ClassFlow</span>
+          <span style={{ color: "white", fontWeight: 700 }}>ScoreQuanta</span>
           <span style={{ color: "#475569", fontSize: 13 }}>AS Maths — {chapter.title || chapter.id}</span>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>

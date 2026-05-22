@@ -40,7 +40,7 @@ function ChapterGrid({ onSelect }) {
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={st.logo}>CF</div>
             <div>
-              <div style={st.appName}>ClassFlow</div>
+              <div style={st.appName}>ScoreQuanta</div>
               <div style={st.boardLabel}>A-Level Edexcel</div>
             </div>
           </div>

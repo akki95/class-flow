@@ -121,7 +121,7 @@ export default function StudentView() {
       <div style={styles.header}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={styles.logoIcon}>CF</div>
-          <span style={{ color: "white", fontWeight: 700 }}>ClassFlow</span>
+          <span style={{ color: "white", fontWeight: 700 }}>ScoreQuanta</span>
           <span style={{ color: "#475569", fontSize: 13 }}>Session: {sessionId}</span>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>

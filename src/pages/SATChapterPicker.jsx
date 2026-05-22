@@ -15,7 +15,7 @@ export default function SATChapterPicker({ onSelect, onBack }) {
             <button onClick={() => setSelectedChapter(null)} style={styles.backBtn}>← Back to Chapters</button>
             <div style={styles.logoRow}>
               <div style={styles.logoIcon}>CF</div>
-              <div style={styles.logoName}>ClassFlow</div>
+              <div style={styles.logoName}>ScoreQuanta</div>
             </div>
           </div>
 
@@ -43,7 +43,7 @@ export default function SATChapterPicker({ onSelect, onBack }) {
           <button onClick={onBack} style={styles.backBtn}>← Back</button>
           <div style={styles.logoRow}>
             <div style={styles.logoIcon}>CF</div>
-            <div style={styles.logoName}>ClassFlow</div>
+            <div style={styles.logoName}>ScoreQuanta</div>
           </div>
         </div>
 

@@ -98,7 +98,7 @@ export default function TeacherDashboard({ user }) {
         <div style={{ fontSize: 48, marginBottom: 8 }}>📚</div>
        <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
         <div style={{ width:44, height:44, borderRadius:10, background:"linear-gradient(135deg, #6366f1, #8b5cf6)", display:"flex", alignItems:"center", justifyContent:"center", fontWeight:900, fontSize:15, color:"white" }}>CF</div>
-        <span style={{ fontWeight:800, fontSize:22, color:"white" }}>ClassFlow</span>
+        <span style={{ fontWeight:800, fontSize:22, color:"white" }}>ScoreQuanta</span>
        </div>
         <div style={{ color: "#94a3b8", marginBottom: 32 }}>Live 1-on-1 Tutoring Platform</div>
         <div style={{ color: "#64748b", fontSize: 13, marginBottom: 8 }}>Chapter: Trigonometry</div>

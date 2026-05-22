@@ -212,7 +212,7 @@ function AgendaView({ topics, completed, onStart, title, subtitle, videoUrl }) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
           <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${T.green}, ${T.green2})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 14, color: "#04120d", flexShrink: 0 }}>CF</div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16, color: T.text }}>ClassFlow</div>
+            <div style={{ fontWeight: 700, fontSize: 16, color: T.text }}>ScoreQuanta</div>
             <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>A-Level Edexcel · Pure Mathematics</div>
           </div>
           <ThemeToggle style={{ marginLeft: "auto" }} />

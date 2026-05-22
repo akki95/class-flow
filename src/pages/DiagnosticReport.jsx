@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { trackEvent } from "../firebase";
 import { createClient } from "@supabase/supabase-js";
 import { useTheme } from "../context/ThemeContext";
 import { fallbackReport } from "../utils/reportGenerator";
@@ -93,6 +94,7 @@ export default function DiagnosticReport({ user }) {
       } catch {
         setReport(null);
       }
+      trackEvent("report_viewed", { attempt_id: attemptId, predicted_range: data.predicted_range });
       setLoading(false);
     } else {
       // Poll for report

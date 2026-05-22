@@ -1,5 +1,5 @@
 /**
- * Maps ScoreQuanta question concepts → ClassFlow lesson IDs.
+ * Maps ScoreQuanta question concepts → ScoreQuanta lesson IDs.
  * Used in the diagnostic report to link "weak concept" → "study this lesson".
  */
 export const CONCEPT_LESSON_MAP = {

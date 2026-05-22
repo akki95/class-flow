@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { db, auth } from "../firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { createClient } from "@supabase/supabase-js";
 import { signOut } from "firebase/auth";
+import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
 const supabaseAdmin = createClient(
@@ -10,82 +11,80 @@ const supabaseAdmin = createClient(
   process.env.REACT_APP_SUPABASE_SERVICE_KEY
 );
 
-const ADMIN_EMAIL      = "akash95agrawal@gmail.com";
-const TEST_ADMIN_EMAIL = "admin@classflow.com";
-const TABS = ["Overview", "Questions", "Blog", "Diagnostics"];
+const ADMIN_EMAILS = ["akash95agrawal@gmail.com", "admin@classflow.com"];
+const TABS = ["Overview", "Diagnostics", "Blog", "Analytics"];
 
-// ── Question form ──────────────────────────────────────────────────────────
-const EMPTY_Q = { question_text: "", option_a: "", option_b: "", option_c: "", option_d: "", correct_answer: "A", concept: "", difficulty: "medium", section: "math", ideal_time_seconds: 60, trap_type: "", numeric_answer: "" };
+// ── Tiny SVG charts ────────────────────────────────────────────────────────────
 
-function QuestionForm({ initial, onSave, onCancel, T }) {
-  const [form, setForm] = useState(initial || EMPTY_Q);
-  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  const inputStyle = { width: "100%", padding: "8px 12px", borderRadius: 8, border: `1px solid ${T.border}`, background: T.surface, color: T.text, fontSize: 13, outline: "none", boxSizing: "border-box" };
-  const labelStyle = { fontSize: 12, fontWeight: 600, color: T.sub, display: "block", marginBottom: 4 };
-
+function LineChart({ data, color = "#1aa38a", height = 60, T }) {
+  if (!data || data.length < 2) return null;
+  const max = Math.max(...data.map(d => d.value), 1);
+  const w = 300, h = height;
+  const pts = data.map((d, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - (d.value / max) * (h - 8) - 4;
+    return `${x},${y}`;
+  });
+  const area = `0,${h} ${pts.join(" ")} ${w},${h}`;
   return (
-    <div style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 14, padding: 24, marginBottom: 16 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
-        <div>
-          <label style={labelStyle}>Question Text (LaTeX OK)</label>
-          <textarea value={form.question_text} onChange={e => set("question_text", e.target.value)}
-            rows={3} style={{ ...inputStyle, resize: "vertical" }} />
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height }} preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.18" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.01" />
+        </linearGradient>
+      </defs>
+      <polygon points={area} fill="url(#lineGrad)" />
+      <polyline points={pts.join(" ")} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" />
+      {data.map((d, i) => {
+        const x = (i / (data.length - 1)) * w;
+        const y = h - (d.value / max) * (h - 8) - 4;
+        return <circle key={i} cx={x} cy={y} r="3" fill={color} />;
+      })}
+    </svg>
+  );
+}
+
+function BarChart({ data, color = "#6366f1", T }) {
+  if (!data || data.length === 0) return null;
+  const max = Math.max(...data.map(d => d.value), 1);
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 80 }}>
+      {data.map((d, i) => (
+        <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+          <div style={{ fontSize: 10, color: T.muted, fontWeight: 600 }}>{d.value || ""}</div>
+          <div style={{
+            width: "100%", borderRadius: 4,
+            background: `linear-gradient(180deg, ${color}, ${color}99)`,
+            height: `${Math.max(4, (d.value / max) * 56)}px`,
+            transition: "height 0.3s",
+          }} />
+          <div style={{ fontSize: 10, color: T.muted, whiteSpace: "nowrap" }}>{d.label}</div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {["a","b","c","d"].map(l => (
-            <div key={l}>
-              <label style={labelStyle}>Option {l.toUpperCase()}</label>
-              <input value={form[`option_${l}`]} onChange={e => set(`option_${l}`, e.target.value)} style={inputStyle} />
-            </div>
-          ))}
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
-          <div>
-            <label style={labelStyle}>Correct Answer</label>
-            <select value={form.correct_answer} onChange={e => set("correct_answer", e.target.value)} style={inputStyle}>
-              {["A","B","C","D"].map(l => <option key={l}>{l}</option>)}
-            </select>
+      ))}
+    </div>
+  );
+}
+
+function StatCard({ icon, value, label, sub, color, trend, T }) {
+  return (
+    <div style={{
+      background: T.card, border: `1px solid ${T.border}`,
+      borderRadius: 14, padding: "20px 20px 16px",
+      display: "flex", flexDirection: "column", gap: 8,
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: `${color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{icon}</div>
+        {trend != null && (
+          <div style={{ fontSize: 12, fontWeight: 700, color: trend >= 0 ? "#1aa38a" : "#ef4444", background: trend >= 0 ? "rgba(26,163,138,0.1)" : "rgba(239,68,68,0.1)", borderRadius: 6, padding: "2px 8px" }}>
+            {trend >= 0 ? "+" : ""}{trend}%
           </div>
-          <div>
-            <label style={labelStyle}>Difficulty</label>
-            <select value={form.difficulty} onChange={e => set("difficulty", e.target.value)} style={inputStyle}>
-              {["easy","medium","hard"].map(d => <option key={d}>{d}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={labelStyle}>Section</label>
-            <select value={form.section} onChange={e => set("section", e.target.value)} style={inputStyle}>
-              {["math","verbal"].map(s => <option key={s}>{s}</option>)}
-            </select>
-          </div>
-          <div>
-            <label style={labelStyle}>Ideal Time (s)</label>
-            <input type="number" value={form.ideal_time_seconds} onChange={e => set("ideal_time_seconds", Number(e.target.value))} style={inputStyle} />
-          </div>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-          <div>
-            <label style={labelStyle}>Concept</label>
-            <input value={form.concept} onChange={e => set("concept", e.target.value)} style={inputStyle} />
-          </div>
-          <div>
-            <label style={labelStyle}>Trap Type</label>
-            <input value={form.trap_type} onChange={e => set("trap_type", e.target.value)} placeholder="optional" style={inputStyle} />
-          </div>
-          <div>
-            <label style={labelStyle}>Numeric Answer</label>
-            <input value={form.numeric_answer} onChange={e => set("numeric_answer", e.target.value)} placeholder="optional" style={inputStyle} />
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button onClick={onCancel} style={{ padding: "8px 18px", borderRadius: 8, border: `1px solid ${T.border}`, background: T.card, color: T.sub, cursor: "pointer", fontSize: 13 }}>
-            Cancel
-          </button>
-          <button onClick={() => onSave(form)} style={{ padding: "8px 18px", borderRadius: 8, background: "#1aa38a", color: "white", border: "none", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
-            Save Question
-          </button>
-        </div>
+        )}
+      </div>
+      <div>
+        <div style={{ fontSize: 28, fontWeight: 900, color, lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: 13, color: T.text, fontWeight: 600, marginTop: 4 }}>{label}</div>
+        {sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>{sub}</div>}
       </div>
     </div>
   );
@@ -95,189 +94,282 @@ export default function AdminDashboard({ user }) {
   const { T } = useTheme();
   const [tab, setTab] = useState("Overview");
 
-  // Sessions
-  const [sessions, setSessions] = useState([]);
-  const [sessionsLoading, setSessionsLoading] = useState(false);
+  // Data
+  const [sessions, setSessions]   = useState([]);
+  const [attempts, setAttempts]   = useState([]);
+  const [posts, setPosts]         = useState([]);
+  const [loaded, setLoaded]       = useState({ sessions: false, attempts: false, posts: false });
 
-  // Questions
-  const [questions, setQuestions] = useState([]);
-  const [qLoading, setQLoading] = useState(false);
-  const [qSearch, setQSearch] = useState("");
-  const [qSection, setQSection] = useState("all");
-  const [qDiff, setQDiff] = useState("all");
-  const [editingQ, setEditingQ] = useState(null);
-  const [addingQ, setAddingQ] = useState(false);
-
-  // Blog
-  const [posts, setPosts] = useState([]);
-  const [blogLoading, setBlogLoading] = useState(false);
-
-  // Diagnostics
-  const [attempts, setAttempts] = useState([]);
-  const [diagLoading, setDiagLoading] = useState(false);
-
-  // Load data when tab switches
-  useEffect(() => {
-    if (tab === "Overview" && sessions.length === 0) loadSessions();
-    if (tab === "Questions" && questions.length === 0) loadQuestions();
-    if (tab === "Blog" && posts.length === 0) loadBlog();
-    if (tab === "Diagnostics" && attempts.length === 0) loadDiagnostics();
-  }, [tab]); // eslint-disable-line
+  // Hooks first
+  useEffect(() => { loadSessions(); loadAttempts(); loadPosts(); }, []); // eslint-disable-line
 
   const loadSessions = async () => {
-    setSessionsLoading(true);
     const snap = await getDocs(query(collection(db, "sessions"), orderBy("createdAt", "desc")));
     setSessions(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    setSessionsLoading(false);
+    setLoaded(l => ({ ...l, sessions: true }));
   };
 
-  const loadQuestions = async () => {
-    setQLoading(true);
-    const { data } = await supabaseAdmin.from("questions").select("id,question_text,concept,difficulty,section,correct_answer,trap_type,option_a,option_b,option_c,option_d,ideal_time_seconds,numeric_answer").order("id", { ascending: false });
-    setQuestions(data || []);
-    setQLoading(false);
-  };
-
-  const loadBlog = async () => {
-    setBlogLoading(true);
-    const { data } = await supabaseAdmin.from("blog_posts").select("id,title,category,published,published_at,read_time_minutes").order("published_at", { ascending: false });
-    setPosts(data || []);
-    setBlogLoading(false);
-  };
-
-  const loadDiagnostics = async () => {
-    setDiagLoading(true);
-    const { data } = await supabaseAdmin.from("test_attempts").select("id,raw_score,math_score,verbal_score,predicted_range,score_ceiling,created_at,user_id").order("created_at", { ascending: false }).limit(50);
+  const loadAttempts = async () => {
+    const { data } = await supabaseAdmin
+      .from("test_attempts")
+      .select("id,raw_score,math_score,verbal_score,predicted_range,score_ceiling,created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
     setAttempts(data || []);
-    setDiagLoading(false);
+    setLoaded(l => ({ ...l, attempts: true }));
   };
 
-  const saveQuestion = async (form) => {
-    const payload = { ...form, numeric_answer: form.numeric_answer || null, trap_type: form.trap_type || null };
-    if (editingQ) {
-      await supabaseAdmin.from("questions").update(payload).eq("id", editingQ.id);
-      setQuestions(qs => qs.map(q => q.id === editingQ.id ? { ...q, ...payload } : q));
-    } else {
-      const { data } = await supabaseAdmin.from("questions").insert(payload).select().single();
-      if (data) setQuestions(qs => [data, ...qs]);
-    }
-    setEditingQ(null); setAddingQ(false);
+  const loadPosts = async () => {
+    const { data } = await supabaseAdmin
+      .from("blog_posts")
+      .select("id,title,category,published,published_at,read_time_minutes,slug")
+      .order("published_at", { ascending: false });
+    setPosts(data || []);
+    setLoaded(l => ({ ...l, posts: true }));
   };
 
-  const deleteQuestion = async (id) => {
-    if (!window.confirm("Delete this question?")) return;
-    await supabaseAdmin.from("questions").delete().eq("id", id);
-    setQuestions(qs => qs.filter(q => q.id !== id));
-  };
-
-  const togglePublished = async (post) => {
-    await supabaseAdmin.from("blog_posts").update({ published: !post.published }).eq("id", post.id);
-    setPosts(ps => ps.map(p => p.id === post.id ? { ...p, published: !p.published } : p));
-  };
-
-  const deletePost = async (id) => {
-    if (!window.confirm("Delete this post?")) return;
-    await supabaseAdmin.from("blog_posts").delete().eq("id", id);
-    setPosts(ps => ps.filter(p => p.id !== id));
-  };
-
-  // Filtered questions
-  const filteredQ = questions.filter(q => {
-    const matchSearch = q.question_text?.toLowerCase().includes(qSearch.toLowerCase()) || q.concept?.toLowerCase().includes(qSearch.toLowerCase());
-    const matchSection = qSection === "all" || q.section === qSection;
-    const matchDiff = qDiff === "all" || q.difficulty === qDiff;
-    return matchSearch && matchSection && matchDiff;
-  });
-
-  // Access check — after all hooks
-  if (user?.email !== ADMIN_EMAIL && user?.email !== TEST_ADMIN_EMAIL) {
+  // Access check after hooks
+  if (!ADMIN_EMAILS.includes(user?.email)) {
     return (
-      <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Inter',sans-serif" }}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ color: "#ef4444", fontSize: 18, fontWeight: 700 }}>Access Denied</div>
-          <p style={{ color: T.sub }}>Logged in as: {user?.email}</p>
-        </div>
+      <div style={{ minHeight: "100vh", background: T.dark, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", color: "#ef4444" }}>Access Denied — {user?.email}</div>
       </div>
     );
   }
 
-  const s = {
-    card: { background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: 20, marginBottom: 16 },
-    th: { textAlign: "left", padding: "8px 12px", fontSize: 11, color: T.muted, fontWeight: 700, textTransform: "uppercase", borderBottom: `1px solid ${T.border}` },
-    td: { padding: "10px 12px", fontSize: 13, color: T.text, borderBottom: `1px solid ${T.border}` },
-  };
+  // ── Computed analytics ─────────────────────────────────────────────────────
+  const last14Days = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (13 - i));
+    const label = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    const dateStr = d.toISOString().slice(0, 10);
+    const value = attempts.filter(a => a.created_at?.slice(0, 10) === dateStr).length;
+    return { label, value };
+  });
 
-  // ── Stat counts ────────────────────────────────────────────────────────
-  const totalSessions = sessions.length;
+  const scoreDistribution = [
+    { label: "400–600",  value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 400 && s < 600; }).length },
+    { label: "600–800",  value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 600 && s < 800; }).length },
+    { label: "800–1000", value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 800 && s < 1000; }).length },
+    { label: "1000–1200",value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 1000 && s < 1200; }).length },
+    { label: "1200–1400",value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 1200 && s < 1400; }).length },
+    { label: "1400+",    value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 1400; }).length },
+  ];
+
+  const avgScore = attempts.filter(a => a.raw_score).length
+    ? Math.round(attempts.filter(a => a.raw_score).reduce((s, a) => s + a.raw_score, 0) / attempts.filter(a => a.raw_score).length * 100 / 12)
+    : 0;
+
+  const thisWeek = attempts.filter(a => {
+    const d = new Date(a.created_at); const now = new Date();
+    return (now - d) < 7 * 24 * 60 * 60 * 1000;
+  }).length;
+
+  const lastWeek = attempts.filter(a => {
+    const d = new Date(a.created_at); const now = new Date();
+    const diff = now - d;
+    return diff >= 7 * 24 * 60 * 60 * 1000 && diff < 14 * 24 * 60 * 60 * 1000;
+  }).length;
+
+  const diagTrend = lastWeek ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100) : null;
   const activeSessions = sessions.filter(s => s.status === "active").length;
   const uniqueTeachers = new Set(sessions.map(s => s.teacherId).filter(Boolean)).size;
 
+  const s = {
+    card: { background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px", marginBottom: 0 },
+    th: { textAlign: "left", padding: "9px 14px", fontSize: 11, color: T.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: `1px solid ${T.border}` },
+    td: { padding: "11px 14px", fontSize: 13, color: T.text, borderBottom: `1px solid ${T.border}` },
+  };
+
+  const isLoading = !loaded.sessions || !loaded.attempts || !loaded.posts;
+
   return (
     <div style={{ minHeight: "100vh", background: T.dark, fontFamily: "'Inter','Segoe UI',sans-serif" }}>
-      {/* Header */}
-      <div style={{ background: T.card, borderBottom: `1px solid ${T.border}`, padding: "0 28px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", height: 58, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#1aa38a,#0d8f77)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 14, color: "white" }}>SQ</div>
-            <span style={{ fontSize: 15, fontWeight: 700, color: T.text }}>ScoreQuanta Admin</span>
-          </div>
-          <div style={{ display: "flex", gap: 6 }}>
-            <button onClick={() => window.location.href = "/admin/theory"} style={{ padding: "6px 14px", background: T.greenBg, color: T.green, border: `1px solid ${T.greenBorder}`, borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
-              📚 Theory Curation
-            </button>
-            <button onClick={() => signOut(auth)} style={{ padding: "6px 14px", background: "rgba(239,68,68,0.08)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer", fontSize: 12 }}>
-              Sign Out
-            </button>
-          </div>
-        </div>
 
-        {/* Tabs */}
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", gap: 4 }}>
-          {TABS.map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{
-              padding: "10px 18px", background: "none", border: "none", cursor: "pointer",
-              fontSize: 14, fontWeight: tab === t ? 700 : 400,
-              color: tab === t ? T.green : T.sub,
-              borderBottom: `2px solid ${tab === t ? T.green : "transparent"}`,
-              transition: "all 0.15s",
-            }}>{t}</button>
-          ))}
+      {/* ── Header ── */}
+      <div style={{ background: T.card, borderBottom: `1px solid ${T.border}` }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 28px" }}>
+          <div style={{ height: 58, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#1aa38a,#0d8f77)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 14, color: "white" }}>SQ</div>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: T.text }}>ScoreQuanta Admin</div>
+                <div style={{ fontSize: 11, color: T.muted }}>Platform management</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <Link to="/" style={{ padding: "6px 14px", background: T.surface, color: T.sub, border: `1px solid ${T.border}`, borderRadius: 8, cursor: "pointer", fontSize: 12, textDecoration: "none", display: "flex", alignItems: "center" }}>
+                ← Live Site
+              </Link>
+              <button onClick={() => window.location.href = "/admin/theory"} style={{ padding: "6px 14px", background: T.greenBg, color: T.green, border: `1px solid ${T.greenBorder}`, borderRadius: 8, cursor: "pointer", fontSize: 12, fontWeight: 600 }}>
+                📚 Theory
+              </button>
+              <button onClick={() => signOut(auth)} style={{ padding: "6px 14px", background: "rgba(239,68,68,0.08)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, cursor: "pointer", fontSize: 12 }}>
+                Sign Out
+              </button>
+            </div>
+          </div>
+          {/* Tabs */}
+          <div style={{ display: "flex", gap: 2 }}>
+            {TABS.map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                padding: "10px 18px", background: "none", border: "none", cursor: "pointer",
+                fontSize: 14, fontWeight: tab === t ? 700 : 400,
+                color: tab === t ? T.green : T.sub,
+                borderBottom: `2px solid ${tab === t ? T.green : "transparent"}`,
+                marginBottom: -1, transition: "all 0.15s",
+              }}>{t}</button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 28px" }}>
+      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "28px 28px 64px" }}>
+        {isLoading && (
+          <div style={{ textAlign: "center", padding: 40, color: T.muted, fontSize: 14 }}>Loading data…</div>
+        )}
 
-        {/* ── OVERVIEW ── */}
-        {tab === "Overview" && (
-          sessionsLoading ? <div style={{ color: T.sub, padding: 40, textAlign: "center" }}>Loading…</div> : <>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 20 }}>
-              {[
-                { label: "Total Sessions",   value: totalSessions,       icon: "📊", color: "#6366f1" },
-                { label: "Active Now",        value: activeSessions,       icon: "🟢", color: "#22c55e" },
-                { label: "Unique Teachers",   value: uniqueTeachers,       icon: "👩‍🏫", color: "#f59e0b" },
-                { label: "Questions",         value: questions.length || "—", icon: "❓", color: "#1aa38a" },
-              ].map((stat, i) => (
-                <div key={i} style={{ ...s.card, textAlign: "center", marginBottom: 0 }}>
-                  <div style={{ fontSize: 24, marginBottom: 8 }}>{stat.icon}</div>
-                  <div style={{ fontSize: 26, fontWeight: 800, color: stat.color }}>{stat.value}</div>
-                  <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>{stat.label}</div>
-                </div>
-              ))}
+        {/* ══ OVERVIEW ══ */}
+        {!isLoading && tab === "Overview" && (
+          <>
+            {/* Stat cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
+              <StatCard icon="📋" value={attempts.length}  label="Total Diagnostics" sub={`${thisWeek} this week`} color="#6366f1" trend={diagTrend} T={T} />
+              <StatCard icon="🎯" value={`${avgScore}%`}   label="Avg Score"         sub="across all attempts"   color="#1aa38a" T={T} />
+              <StatCard icon="📖" value={sessions.length}  label="Total Sessions"    sub={`${activeSessions} active now`} color="#f59e0b" T={T} />
+              <StatCard icon="✍️" value={posts.filter(p => p.published).length} label="Blog Posts" sub={`${posts.length} total`} color="#8b5cf6" T={T} />
             </div>
+
+            {/* Charts row */}
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16, marginBottom: 20 }}>
+              {/* Diagnostics over time */}
+              <div style={{ ...s.card }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>Diagnostics — Last 14 Days</div>
+                    <div style={{ fontSize: 12, color: T.muted, marginTop: 2 }}>{attempts.length} total attempts</div>
+                  </div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#6366f1" }}>{thisWeek} <span style={{ fontSize: 12, fontWeight: 400, color: T.muted }}>this week</span></div>
+                </div>
+                <LineChart data={last14Days} color="#6366f1" height={72} T={T} />
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
+                  {last14Days.filter((_, i) => i % 2 === 0).map((d, i) => (
+                    <div key={i} style={{ fontSize: 10, color: T.muted }}>{d.label}</div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Score distribution */}
+              <div style={{ ...s.card }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>Score Distribution</div>
+                <div style={{ fontSize: 12, color: T.muted, marginBottom: 16 }}>Predicted SAT ranges</div>
+                <BarChart data={scoreDistribution} color="#1aa38a" T={T} />
+              </div>
+            </div>
+
+            {/* Quick actions + sessions */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 16 }}>
+              {/* Quick actions */}
+              <div style={{ ...s.card, display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>Quick Actions</div>
+                {[
+                  { icon: "📝", label: "Manage Blog Posts",    to: null,       onClick: () => setTab("Blog"),        color: "#8b5cf6" },
+                  { icon: "📊", label: "View Diagnostics",     to: null,       onClick: () => setTab("Diagnostics"), color: "#6366f1" },
+                  { icon: "📚", label: "AI Theory Curation",   to: "/admin/theory", color: "#1aa38a" },
+                  { icon: "🌐", label: "View Live Site",        to: "/",        color: "#f59e0b" },
+                  { icon: "📈", label: "Google Analytics",      href: "https://analytics.google.com", color: "#ef4444" },
+                ].map((action, i) => {
+                  const style = {
+                    display: "flex", alignItems: "center", gap: 12,
+                    padding: "12px 14px", borderRadius: 10,
+                    background: T.surface, border: `1px solid ${T.border}`,
+                    cursor: "pointer", textDecoration: "none",
+                    transition: "border-color 0.15s",
+                  };
+                  const content = (
+                    <>
+                      <div style={{ width: 32, height: 32, borderRadius: 8, background: `${action.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>{action.icon}</div>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{action.label}</span>
+                      <span style={{ marginLeft: "auto", color: T.muted, fontSize: 14 }}>→</span>
+                    </>
+                  );
+                  if (action.href) return <a key={i} href={action.href} target="_blank" rel="noreferrer" style={style}>{content}</a>;
+                  if (action.to) return <Link key={i} to={action.to} style={style}>{content}</Link>;
+                  return <div key={i} style={style} onClick={action.onClick}>{content}</div>;
+                })}
+              </div>
+
+              {/* Recent sessions */}
+              <div style={{ ...s.card }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 14 }}>Recent Sessions</div>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead><tr>{["Session","Curriculum","Chapter","Status","Date"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
+                  <tbody>
+                    {sessions.slice(0, 8).map((sess, i) => (
+                      <tr key={i}>
+                        <td style={{ ...s.td, color: "#6366f1", fontWeight: 700, fontSize: 12 }}>{sess.id.slice(0, 8)}…</td>
+                        <td style={s.td}>{sess.curriculum?.toUpperCase() || "SAT"}</td>
+                        <td style={{ ...s.td, color: T.sub, fontSize: 12 }}>{sess.chapter || "—"}</td>
+                        <td style={s.td}>
+                          <span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 700, background: sess.status === "ended" ? T.greenBg : "rgba(245,158,11,0.1)", color: sess.status === "ended" ? T.green : "#f59e0b" }}>
+                            {sess.status || "active"}
+                          </span>
+                        </td>
+                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{sess.createdAt?.toDate?.()?.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ══ DIAGNOSTICS ══ */}
+        {!isLoading && tab === "Diagnostics" && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 20 }}>
+              <StatCard icon="📋" value={attempts.length}   label="Total Attempts"  sub="all time"              color="#6366f1" T={T} />
+              <StatCard icon="🎯" value={`${avgScore}%`}    label="Average Accuracy" sub="raw score / 12"       color="#1aa38a" T={T} />
+              <StatCard icon="📈" value={attempts.filter(a => a.predicted_range).length} label="Reports Generated" sub="with AI analysis" color="#f59e0b" T={T} />
+            </div>
+
+            {/* Charts */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+              <div style={s.card}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 16 }}>Daily Attempts — Last 14 Days</div>
+                <LineChart data={last14Days} color="#6366f1" height={80} T={T} />
+              </div>
+              <div style={s.card}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 16 }}>Score Distribution</div>
+                <BarChart data={scoreDistribution} color="#1aa38a" T={T} />
+              </div>
+            </div>
+
+            {/* Table */}
             <div style={s.card}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 14 }}>🕐 Recent Sessions</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 14 }}>All Attempts</div>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead><tr>{["Session ID","Curriculum","Chapter","Status","Date"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
+                <thead><tr>{["#","Score","Math","Verbal","Predicted","Ceiling","Date","Report"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
                 <tbody>
-                  {sessions.slice(0, 15).map((sess, i) => (
-                    <tr key={i}>
-                      <td style={{ ...s.td, color: "#6366f1", fontWeight: 700 }}>{sess.id.slice(0, 8)}…</td>
-                      <td style={s.td}>{sess.curriculum?.toUpperCase() || "SAT"}</td>
-                      <td style={s.td}>{sess.chapter || "—"}</td>
-                      <td style={s.td}>
-                        <span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600, background: sess.status === "ended" ? T.greenBg : "rgba(245,158,11,0.1)", color: sess.status === "ended" ? T.green : "#f59e0b" }}>{sess.status || "active"}</span>
+                  {attempts.map((a, i) => (
+                    <tr key={i} style={{ opacity: a.raw_score == null ? 0.5 : 1 }}>
+                      <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>#{a.id}</td>
+                      <td style={{ ...s.td }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ width: 40, height: 6, background: T.surface, borderRadius: 3, overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${((a.raw_score || 0) / 12) * 100}%`, background: a.raw_score >= 9 ? "#1aa38a" : a.raw_score >= 6 ? "#f59e0b" : "#ef4444", borderRadius: 3 }} />
+                          </div>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{a.raw_score ?? "—"}/12</span>
+                        </div>
                       </td>
-                      <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{sess.createdAt?.toDate?.()?.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) || "—"}</td>
+                      <td style={s.td}>{a.math_score ?? "—"}</td>
+                      <td style={s.td}>{a.verbal_score ?? "—"}</td>
+                      <td style={{ ...s.td, fontWeight: 600, color: "#6366f1" }}>{a.predicted_range || "—"}</td>
+                      <td style={{ ...s.td, color: T.green, fontWeight: 600 }}>{a.score_ceiling || "—"}</td>
+                      <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{new Date(a.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</td>
+                      <td style={s.td}>
+                        <Link to={`/diagnostic/report/${a.id}`} style={{ fontSize: 12, color: T.green, textDecoration: "none", fontWeight: 700 }}>View →</Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -286,112 +378,95 @@ export default function AdminDashboard({ user }) {
           </>
         )}
 
-        {/* ── QUESTIONS ── */}
-        {tab === "Questions" && (
+        {/* ══ BLOG ══ */}
+        {!isLoading && tab === "Blog" && (
           <>
-            <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap", alignItems: "center" }}>
-              <input placeholder="Search questions…" value={qSearch} onChange={e => setQSearch(e.target.value)}
-                style={{ flex: 1, minWidth: 200, padding: "8px 12px", borderRadius: 8, border: `1px solid ${T.border}`, background: T.card, color: T.text, fontSize: 13, outline: "none" }} />
-              {[["all","All"],["math","Math"],["verbal","Verbal"]].map(([v,l]) => (
-                <button key={v} onClick={() => setQSection(v)} style={{ padding: "7px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer", border: `1px solid ${qSection===v ? T.green : T.border}`, background: qSection===v ? T.green : T.card, color: qSection===v ? "white" : T.sub }}>{l}</button>
-              ))}
-              {[["all","All"],["easy","Easy"],["medium","Med"],["hard","Hard"]].map(([v,l]) => (
-                <button key={v} onClick={() => setQDiff(v)} style={{ padding: "7px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer", border: `1px solid ${qDiff===v ? "#6366f1" : T.border}`, background: qDiff===v ? "#6366f1" : T.card, color: qDiff===v ? "white" : T.sub }}>{l}</button>
-              ))}
-              <button onClick={() => { setAddingQ(true); setEditingQ(null); }} style={{ padding: "7px 16px", borderRadius: 8, background: "#1aa38a", color: "white", border: "none", cursor: "pointer", fontSize: 13, fontWeight: 700, marginLeft: "auto" }}>
-                + Add Question
-              </button>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 20 }}>
+              <StatCard icon="✅" value={posts.filter(p => p.published).length} label="Published"  color="#1aa38a" T={T} />
+              <StatCard icon="📝" value={posts.filter(p => !p.published).length} label="Drafts"    color="#f59e0b" T={T} />
+              <StatCard icon="📂" value={[...new Set(posts.map(p => p.category))].length} label="Categories" color="#6366f1" T={T} />
             </div>
-
-            {(addingQ || editingQ) && (
-              <QuestionForm initial={editingQ} onSave={saveQuestion} onCancel={() => { setEditingQ(null); setAddingQ(false); }} T={T} />
-            )}
-
-            {qLoading ? <div style={{ color: T.sub, textAlign: "center", padding: 40 }}>Loading…</div> : (
-              <div style={{ fontSize: 13, color: T.muted, marginBottom: 10 }}>{filteredQ.length} questions</div>
-            )}
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {filteredQ.map(q => (
-                <div key={q.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderLeft: `3px solid ${q.section==="math"?"#6366f1":"#1aa38a"}`, borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{q.question_text?.replace(/\\\(|\\\)/g, "").slice(0, 80)}…</div>
-                    <div style={{ fontSize: 11, color: T.muted, marginTop: 3 }}>{q.concept} · {q.difficulty} · {q.section} · #{q.id}</div>
+            <div style={s.card}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {posts.map(post => (
+                  <div key={post.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", background: T.surface, border: `1px solid ${T.border}`, borderRadius: 10 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{post.title}</div>
+                      <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>{post.category} · {post.read_time_minutes} min · {new Date(post.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</div>
+                    </div>
+                    <button onClick={async () => {
+                      await supabaseAdmin.from("blog_posts").update({ published: !post.published }).eq("id", post.id);
+                      setPosts(ps => ps.map(p => p.id === post.id ? { ...p, published: !p.published } : p));
+                    }} style={{ padding: "4px 12px", borderRadius: 16, fontSize: 11, fontWeight: 700, cursor: "pointer", border: `1px solid ${post.published ? T.greenBorder : T.border}`, background: post.published ? T.greenBg : T.surface, color: post.published ? T.green : T.muted }}>
+                      {post.published ? "Published" : "Draft"}
+                    </button>
+                    <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: T.green, textDecoration: "none", fontWeight: 600 }}>View ↗</a>
+                    <button onClick={async () => {
+                      if (!window.confirm("Delete?")) return;
+                      await supabaseAdmin.from("blog_posts").delete().eq("id", post.id);
+                      setPosts(ps => ps.filter(p => p.id !== post.id));
+                    }} style={{ padding: "4px 10px", borderRadius: 6, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444", cursor: "pointer", fontSize: 11 }}>
+                      Delete
+                    </button>
                   </div>
-                  <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                    <button onClick={() => { setEditingQ(q); setAddingQ(false); window.scrollTo(0,0); }} style={{ padding: "4px 10px", borderRadius: 6, background: T.surface, border: `1px solid ${T.border}`, color: T.sub, cursor: "pointer", fontSize: 11 }}>Edit</button>
-                    <button onClick={() => deleteQuestion(q.id)} style={{ padding: "4px 10px", borderRadius: 6, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444", cursor: "pointer", fontSize: 11 }}>Delete</button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </>
         )}
 
-        {/* ── BLOG ── */}
-        {tab === "Blog" && (
-          blogLoading ? <div style={{ color: T.sub, textAlign: "center", padding: 40 }}>Loading…</div> : (
-            <>
-              <div style={{ fontSize: 13, color: T.muted, marginBottom: 12 }}>{posts.length} posts</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {posts.map(post => (
-                  <div key={post.id} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{post.title}</div>
-                      <div style={{ fontSize: 11, color: T.muted, marginTop: 3 }}>{post.category} · {post.read_time_minutes} min · {new Date(post.published_at).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" })}</div>
-                    </div>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
-                      <button onClick={() => togglePublished(post)} style={{ padding: "4px 12px", borderRadius: 16, fontSize: 11, fontWeight: 700, cursor: "pointer", border: `1px solid ${post.published ? T.greenBorder : T.border}`, background: post.published ? T.greenBg : T.surface, color: post.published ? T.green : T.muted }}>
-                        {post.published ? "Published" : "Draft"}
-                      </button>
-                      <a href={`/blog/${post.title.toLowerCase().replace(/[^a-z0-9]+/g,"-")}`} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: T.green, textDecoration: "none", fontWeight: 600 }}>View ↗</a>
-                      <button onClick={() => deletePost(post.id)} style={{ padding: "4px 10px", borderRadius: 6, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#ef4444", cursor: "pointer", fontSize: 11 }}>Delete</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )
-        )}
+        {/* ══ ANALYTICS ══ */}
+        {!isLoading && tab === "Analytics" && (
+          <>
+            {/* Computed metrics */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 20 }}>
+              <StatCard icon="📅" value={thisWeek}     label="Diagnostics This Week" color="#6366f1" trend={diagTrend} T={T} />
+              <StatCard icon="🏆" value={attempts.filter(a => parseInt(a.predicted_range) >= 1200).length} label="Scoring 1200+" color="#1aa38a" T={T} />
+              <StatCard icon="📖" value={sessions.filter(s => { const d = new Date(s.createdAt?.toDate?.()); return (new Date() - d) < 7*24*60*60*1000; }).length} label="Sessions This Week" color="#f59e0b" T={T} />
+              <StatCard icon="🌐" value={posts.filter(p => p.published).length} label="Live Blog Posts" color="#8b5cf6" T={T} />
+            </div>
 
-        {/* ── DIAGNOSTICS ── */}
-        {tab === "Diagnostics" && (
-          diagLoading ? <div style={{ color: T.sub, textAlign: "center", padding: 40 }}>Loading…</div> : (
-            <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 20 }}>
-                {[
-                  { label: "Total Attempts", value: attempts.length, color: "#6366f1" },
-                  { label: "Avg Score",  value: attempts.length ? Math.round(attempts.filter(a=>a.raw_score).reduce((s,a)=>s+a.raw_score,0) / attempts.filter(a=>a.raw_score).length * 100 / 12) + "%" : "—", color: "#1aa38a" },
-                  { label: "With Reports", value: attempts.filter(a => a.predicted_range).length, color: "#f59e0b" },
-                ].map((stat, i) => (
-                  <div key={i} style={{ ...s.card, textAlign: "center", marginBottom: 0 }}>
-                    <div style={{ fontSize: 28, fontWeight: 800, color: stat.color }}>{stat.value}</div>
-                    <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>{stat.label}</div>
-                  </div>
-                ))}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+              <div style={s.card}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>Diagnostic Trend</div>
+                <div style={{ fontSize: 12, color: T.muted, marginBottom: 16 }}>Attempts per day, last 14 days</div>
+                <LineChart data={last14Days} color="#6366f1" height={90} T={T} />
               </div>
               <div style={s.card}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead><tr>{["ID","Score","Math","Verbal","Predicted","Ceiling","Date","Report"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
-                  <tbody>
-                    {attempts.map((a, i) => (
-                      <tr key={i}>
-                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>#{a.id}</td>
-                        <td style={{ ...s.td, fontWeight: 700, color: T.text }}>{a.raw_score ?? "—"}/12</td>
-                        <td style={s.td}>{a.math_score ?? "—"}</td>
-                        <td style={s.td}>{a.verbal_score ?? "—"}</td>
-                        <td style={{ ...s.td, fontWeight: 600, color: "#6366f1" }}>{a.predicted_range || "—"}</td>
-                        <td style={{ ...s.td, color: T.green }}>{a.score_ceiling || "—"}</td>
-                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{new Date(a.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</td>
-                        <td style={s.td}>
-                          <a href={`/diagnostic/report/${a.id}`} style={{ fontSize: 11, color: T.green, textDecoration: "none", fontWeight: 600 }}>View →</a>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>Score Distribution</div>
+                <div style={{ fontSize: 12, color: T.muted, marginBottom: 16 }}>Predicted score ranges</div>
+                <BarChart data={scoreDistribution} color="#1aa38a" T={T} />
               </div>
-            </>
-          )
+            </div>
+
+            {/* GA4 link */}
+            <div style={{ ...s.card, background: "linear-gradient(135deg, rgba(99,102,241,0.06), rgba(26,163,138,0.06))", border: `1px solid ${T.border}` }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: T.text, marginBottom: 6 }}>Google Analytics 4</div>
+                  <div style={{ fontSize: 14, color: T.sub, marginBottom: 4 }}>Measurement ID: <code style={{ background: T.surface, padding: "2px 6px", borderRadius: 4, fontSize: 13 }}>G-VF7KKBTJNH</code></div>
+                  <div style={{ fontSize: 13, color: T.muted }}>Page views, sessions, geography, traffic sources — all in GA4 dashboard.</div>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <a href="https://analytics.google.com/analytics/web/#/p{G-VF7KKBTJNH}/reports/intelligenthome" target="_blank" rel="noreferrer" style={{ padding: "10px 20px", borderRadius: 10, background: "#4285f4", color: "white", textDecoration: "none", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
+                    <span>Open GA4 Dashboard ↗</span>
+                  </a>
+                  <a href="https://console.firebase.google.com/project/class-flow-64719/analytics" target="_blank" rel="noreferrer" style={{ padding: "10px 20px", borderRadius: 10, background: T.greenBg, color: T.green, border: `1px solid ${T.greenBorder}`, textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
+                    Firebase Console ↗
+                  </a>
+                </div>
+              </div>
+
+              <div style={{ borderTop: `1px solid ${T.border}`, marginTop: 20, paddingTop: 16 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 12 }}>Events being tracked</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {["page_view (automatic)", "diagnostic_started", "diagnostic_completed", "report_viewed", "lesson_opened", "blog_post_viewed"].map(e => (
+                    <span key={e} style={{ background: T.surface, border: `1px solid ${T.border}`, borderRadius: 6, padding: "4px 10px", fontSize: 12, color: T.sub, fontWeight: 500 }}>{e}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -74,7 +74,7 @@ export default function Demo() {
       <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 32px", borderBottom: `1px solid ${T.border}`, background: T.card }}>
         <div style={{ width: 38, height: 38, borderRadius: 9, background: `linear-gradient(135deg, ${T.green}, ${T.green2})`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 13, color: "#04120d" }}>CF</div>
         <div>
-          <div style={{ fontWeight: 800, fontSize: 16, color: T.text }}>ClassFlow</div>
+          <div style={{ fontWeight: 800, fontSize: 16, color: T.text }}>ScoreQuanta</div>
           <div style={{ fontSize: 11, color: T.muted }}>Maths · GCSE · IGCSE · SAT · A-Level</div>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
@@ -92,7 +92,7 @@ export default function Demo() {
           <p style={{ color: T.green, fontSize: 13, lineHeight: 1.7, margin: 0, fontStyle: "italic", fontWeight: 500 }}>
             "A student has <strong style={{ fontStyle: "normal" }}>learned</strong> something when they can transfer it to an unfamiliar context, accurately, without hints, and still get it right a week later."
           </p>
-          <div style={{ color: T.muted, fontSize: 10, marginTop: 6, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>The ClassFlow Standard</div>
+          <div style={{ color: T.muted, fontSize: 10, marginTop: 6, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>The ScoreQuanta Standard</div>
         </div>
       </div>
 

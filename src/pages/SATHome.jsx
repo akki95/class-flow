@@ -27,7 +27,7 @@ function ChapterGrid({ onSelectChapter }) {
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={st.logo}>CF</div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: 16, color: T.text }}>ClassFlow</div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: T.text }}>ScoreQuanta</div>
               <div style={{ fontSize: 11, color: T.muted }}>Digital SAT · Math</div>
             </div>
           </div>

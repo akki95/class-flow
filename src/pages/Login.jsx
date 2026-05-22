@@ -90,7 +90,7 @@ export default function Login() {
         <div style={styles.logoRow}>
           <div style={styles.logoIcon}>CF</div>
           <div>
-            <div style={styles.logoName}>ClassFlow</div>
+            <div style={styles.logoName}>ScoreQuanta</div>
             <div style={styles.logoSub}>Live 1-on-1 Tutoring Platform</div>
           </div>
         </div>

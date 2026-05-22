@@ -187,7 +187,7 @@ export default function SATTeacherDashboard({ user, chapter, lesson, onBack }) {
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
           <div style={ls.cfBadge}>CF</div>
           <div>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#0f172a" }}>ClassFlow</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#0f172a" }}>ScoreQuanta</div>
             <div style={{ fontSize: 12, color: "#94a3b8" }}>SAT Preparation</div>
           </div>
         </div>
@@ -228,7 +228,7 @@ export default function SATTeacherDashboard({ user, chapter, lesson, onBack }) {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={ls.cfBadge}>CF</div>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>ClassFlow</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>ScoreQuanta</div>
             <div style={{ fontSize: 12, color: "#94a3b8" }}>SAT — {chapter.title}</div>
           </div>
         </div>

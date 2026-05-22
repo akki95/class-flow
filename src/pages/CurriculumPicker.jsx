@@ -33,7 +33,7 @@ export default function CurriculumPicker({ user, onSelect }) {
         <div style={styles.logoRow}>
           <div style={styles.logoIcon}>CF</div>
           <div>
-            <div style={styles.logoName}>ClassFlow</div>
+            <div style={styles.logoName}>ScoreQuanta</div>
             <div style={styles.logoSub}>Welcome back, {user.email}</div>
           </div>
         </div>

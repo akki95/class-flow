@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
+import { trackEvent } from "../firebase";
 import { useTheme } from "../context/ThemeContext";
 import { computeMetrics, predictScore } from "../utils/metricsEngine";
 import { generateReport, fallbackReport } from "../utils/reportGenerator";
@@ -88,6 +89,7 @@ export default function SATDiagnostic({ user }) {
 
   // ── Start test ────────────────────────────────────────────────────────
   const startTest = () => {
+    trackEvent("diagnostic_started", { curriculum: "sat" });
     setPhase("test");
     setQuestionStartTime(Date.now());
   };
@@ -213,6 +215,7 @@ export default function SATDiagnostic({ user }) {
           }).eq("id", attempt.id);
         });
 
+      trackEvent("diagnostic_completed", { curriculum: "sat", raw_score: metrics.total_score, attempt_id: attempt.id });
       // Navigate immediately — report page polls until ready
       navigate(`/diagnostic/report/${attempt.id}`);
 

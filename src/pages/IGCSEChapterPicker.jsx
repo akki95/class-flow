@@ -31,7 +31,7 @@ export default function IGCSEChapterPicker({ chapters, onSelect, onBack }) {
           <button onClick={onBack} style={styles.backBtn}>← Back</button>
           <div style={styles.logoRow}>
             <div style={styles.logoIcon}>CF</div>
-            <div style={styles.logoName}>ClassFlow</div>
+            <div style={styles.logoName}>ScoreQuanta</div>
           </div>
         </div>
 
