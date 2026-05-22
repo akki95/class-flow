@@ -4,6 +4,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { auth, db } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import Landing from "./pages/Landing";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import SATScorePercentile from "./pages/SATScorePercentile";
+import WhatSATScoreDoINeed from "./pages/WhatSATScoreDoINeed";
+import DiagnosticHome from "./pages/DiagnosticHome";
+import SATDiagnostic from "./pages/SATDiagnostic";
+import DiagnosticReport from "./pages/DiagnosticReport";
 import Login from "./pages/Login";
 import SmartStudentView from "./pages/SmartStudentView";
 import IGCSEStudentView from "./pages/IGCSEStudentView";
@@ -65,8 +73,8 @@ export default function App() {
   if (loading) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", background: "#f7f4ef", color: "#1c2b3a", fontSize: "1.1rem", fontFamily: "'Segoe UI', sans-serif" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #1aa38a, #0d8f77)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18, color: "white", margin: "0 auto 16px" }}>CF</div>
-        <div>Loading ClassFlow...</div>
+        <div style={{ width: 48, height: 48, borderRadius: 12, background: "linear-gradient(135deg, #1aa38a, #0d8f77)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 18, color: "white", margin: "0 auto 16px" }}>SQ</div>
+        <div>Loading ScoreQuanta...</div>
       </div>
     </div>
   );
@@ -110,8 +118,8 @@ export default function App() {
    }
 };
 
-  const renderDefaultRoute = () => {
-    if (!user) return <Navigate to="/demo" />;
+  const renderAppRoute = () => {
+    if (!user) return <Navigate to="/login" />;
     if (userRole === "student") return <Navigate to="/student-dashboard" />;
     if (userRole === "admin") return <Navigate to="/admin" />;
     return <Navigate to="/teacher" />;
@@ -122,16 +130,29 @@ export default function App() {
     <ThemeProvider>
     <Router>
       <Routes>
-        <Route path="/" element={renderDefaultRoute()} />
+        {/* ── Public ── */}
+        <Route path="/" element={<Landing user={user} />} />
+        <Route path="/blog" element={<Blog user={user} />} />
+        <Route path="/blog/:slug" element={<BlogPost user={user} />} />
+        <Route path="/sat-score-percentile" element={<SATScorePercentile user={user} />} />
+        <Route path="/what-sat-score-do-i-need" element={<WhatSATScoreDoINeed user={user} />} />
+        <Route path="/diagnostic" element={<DiagnosticHome user={user} />} />
+        <Route path="/diagnostic/sat" element={<SATDiagnostic user={user} />} />
+        <Route path="/diagnostic/report/:attemptId" element={<DiagnosticReport user={user} />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/demo" element={<Demo />} />
+
+        {/* ── App (auth) ── */}
+        <Route path="/app" element={renderAppRoute()} />
         <Route path="/teacher" element={user && userRole !== "student" ? renderTeacherFlow() : <Navigate to="/login" />} />
         <Route path="/homework" element={user && userRole !== "student" ? <HomeworkManager user={user} /> : <Navigate to="/login" />} />
         <Route path="/student-dashboard" element={user && userRole === "student" ? <StudentDashboard user={user} /> : <Navigate to="/login" />} />
-        <Route path="/student/:sessionId" element={<SmartStudentView />} /> 
+        <Route path="/student/:sessionId" element={<SmartStudentView />} />
         <Route path="/igcse-student/:sessionId" element={<IGCSEStudentView />} />
         <Route path="/admin" element={user ? <AdminDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/admin/theory" element={user ? <AdminTheoryDashboard user={user} onBack={() => window.history.back()} /> : <Navigate to="/login" />} />
-        <Route path="/demo" element={<Demo />} />
+
+        {/* ── Curriculum ── */}
         <Route path="/igcse/edexcel/sequences" element={<SequencesFlow />} />
         <Route path="/igcse/edexcel/pure" element={<><PureMathsHome /><FeedbackWidget userEmail={user?.email} /></>} />
         <Route path="/igcse/edexcel/stats" element={<><StatsHome /><FeedbackWidget userEmail={user?.email} /></>} />
