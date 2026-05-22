@@ -49,14 +49,12 @@ export default function CurriculumPicker({ user, onSelect }) {
             <div style={styles.optionMeta}>A-Level Edexcel • From Firestore</div>
           </button>
 
-          {/* SAT hidden for now
           <button onClick={() => handleSelect("sat")} style={styles.optionCard} disabled={loading}>
             <div style={styles.optionIcon}>📐</div>
             <div style={styles.optionTitle}>SAT Math</div>
             <div style={styles.optionDesc}>Digital SAT • Geometry & Algebra • Trigonometry</div>
             <div style={styles.optionMeta}>Math + Verbal • 8 chapters • From Supabase</div>
           </button>
-          */}
 
           <button onClick={() => navigate("/homework")} style={{ ...styles.optionCard, background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)" }} disabled={loading}>
             <div style={styles.optionIcon}>📝</div>

@@ -4,6 +4,16 @@ import { useTheme, ThemeToggle } from "../context/ThemeContext";
 
 const LEVELS = [
   {
+    id: "sat",
+    label: "SAT",
+    tag: "US College Admissions",
+    desc: "Digital SAT · Math",
+    color: "#6366f1",
+    subjects: [
+      { id: "sat-math", icon: "📐", title: "SAT Math", desc: "Digital SAT · Algebra, Geometry, Trigonometry & Data Analysis · 8 chapters", accent: "#6366f1", route: "/teacher" },
+    ],
+  },
+  {
     id: "gcse",
     label: "GCSE",
     tag: "Ages 14–16",
