@@ -60,27 +60,27 @@ These are extremely useful on the SAT when you're asked about the sum or product
     formulas: [
       {
         label: "Quadratic formula",
-        formula: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+        latex: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
       },
       {
         label: "Vertex (axis of symmetry)",
-        formula: "h = -\\frac{b}{2a}, \\quad k = f(h)",
+        latex: "h = -\\frac{b}{2a}, \\quad k = f(h)",
       },
       {
         label: "Vertex form",
-        formula: "y = a(x - h)^2 + k",
+        latex: "y = a(x - h)^2 + k",
       },
       {
         label: "Discriminant",
-        formula: "\\Delta = b^2 - 4ac",
+        latex: "\\Delta = b^2 - 4ac",
       },
       {
         label: "Vieta's — sum of roots",
-        formula: "p + q = -\\frac{b}{a}",
+        latex: "p + q = -\\frac{b}{a}",
       },
       {
         label: "Vieta's — product of roots",
-        formula: "p \\cdot q = \\frac{c}{a}",
+        latex: "p \\cdot q = \\frac{c}{a}",
       },
     ],
 
@@ -183,23 +183,23 @@ To solve a system with one linear and one quadratic equation:
     formulas: [
       {
         label: "Difference of squares",
-        formula: "a^2 - b^2 = (a + b)(a - b)",
+        latex: "a^2 - b^2 = (a + b)(a - b)",
       },
       {
         label: "Perfect square (sum)",
-        formula: "(a + b)^2 = a^2 + 2ab + b^2",
+        latex: "(a + b)^2 = a^2 + 2ab + b^2",
       },
       {
         label: "Perfect square (difference)",
-        formula: "(a - b)^2 = a^2 - 2ab + b^2",
+        latex: "(a - b)^2 = a^2 - 2ab + b^2",
       },
       {
         label: "Remainder theorem",
-        formula: "f(a) = \\text{remainder when } f(x) \\div (x - a)",
+        latex: "f(a) = \\text{remainder when } f(x) \\div (x - a)",
       },
       {
         label: "Factor theorem",
-        formula: "f(a) = 0 \\iff (x - a) \\text{ is a factor of } f(x)",
+        latex: "f(a) = 0 \\iff (x - a) \\text{ is a factor of } f(x)",
       },
     ],
 
@@ -302,15 +302,15 @@ A rational expression is a fraction with polynomials in numerator and denominato
     formulas: [
       {
         label: "Rational exponent",
-        formula: "a^{\\frac{m}{n}} = \\left(\\sqrt[n]{a}\\right)^m",
+        latex: "a^{\\frac{m}{n}} = \\left(\\sqrt[n]{a}\\right)^m",
       },
       {
         label: "Solving radical equations",
-        formula: "\\sqrt{f(x)} = g(x) \\implies f(x) = [g(x)]^2, \\text{ then check solutions}",
+        latex: "\\sqrt{f(x)} = g(x) \\implies f(x) = [g(x)]^2, \\text{ then check solutions}",
       },
       {
         label: "Simplifying rational expressions",
-        formula: "\\frac{p(x)}{q(x)} = \\frac{\\text{factored numerator}}{\\text{factored denominator}}, \\text{ cancel common factors}",
+        latex: "\\frac{p(x)}{q(x)} = \\frac{\\text{factored numerator}}{\\text{factored denominator}}, \\text{ cancel common factors}",
       },
     ],
 
@@ -424,19 +424,19 @@ When it says "decreases by 8% each month," write $b = 0.92$.`,
     formulas: [
       {
         label: "General exponential",
-        formula: "f(x) = a \\cdot b^x",
+        latex: "f(x) = a \\cdot b^x",
       },
       {
         label: "Exponential growth (percentage)",
-        formula: "f(t) = a(1 + r)^t",
+        latex: "f(t) = a(1 + r)^t",
       },
       {
         label: "Exponential decay (percentage)",
-        formula: "f(t) = a(1 - r)^t",
+        latex: "f(t) = a(1 - r)^t",
       },
       {
         label: "Half-life model",
-        formula: "f(t) = a \\cdot \\left(\\frac{1}{2}\\right)^{t/h}, \\quad h = \\text{half-life}",
+        latex: "f(t) = a \\cdot \\left(\\frac{1}{2}\\right)^{t/h}, \\quad h = \\text{half-life}",
       },
     ],
 

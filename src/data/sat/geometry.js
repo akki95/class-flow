@@ -58,31 +58,31 @@ Corresponding angles are equal; corresponding sides are proportional.
     formulas: [
       {
         label: "Triangle area",
-        formula: "A=\\frac{1}{2}bh",
+        latex: "A=\\frac{1}{2}bh",
       },
       {
         label: "Circle area",
-        formula: "A=\\pi r^2",
+        latex: "A=\\pi r^2",
       },
       {
         label: "Cylinder volume",
-        formula: "V=\\pi r^2 h",
+        latex: "V=\\pi r^2 h",
       },
       {
         label: "Sphere volume",
-        formula: "V=\\frac{4}{3}\\pi r^3",
+        latex: "V=\\frac{4}{3}\\pi r^3",
       },
       {
         label: "Exterior angle theorem",
-        formula: "\\text{exterior angle} = \\text{sum of two non-adjacent interior angles}",
+        latex: "\\text{exterior angle} = \\text{sum of two non-adjacent interior angles}",
       },
       {
         label: "Similarity — area ratio",
-        formula: "\\text{area ratio} = k^2",
+        latex: "\\text{area ratio} = k^2",
       },
       {
         label: "Similarity — volume ratio",
-        formula: "\\text{volume ratio} = k^3",
+        latex: "\\text{volume ratio} = k^3",
       },
     ],
     example: {
@@ -155,23 +155,23 @@ $$\\text{sector area} = \\frac{\\theta}{360°}\\times \\pi r^2$$
     formulas: [
       {
         label: "Circle equation",
-        formula: "(x-h)^2+(y-k)^2=r^2",
+        latex: "(x-h)^2+(y-k)^2=r^2",
       },
       {
         label: "Arc length",
-        formula: "= \\frac{\\theta}{360°}\\times 2\\pi r",
+        latex: "= \\frac{\\theta}{360°}\\times 2\\pi r",
       },
       {
         label: "Sector area",
-        formula: "= \\frac{\\theta}{360°}\\times \\pi r^2",
+        latex: "= \\frac{\\theta}{360°}\\times \\pi r^2",
       },
       {
         label: "Inscribed angle",
-        formula: "= \\frac{1}{2}\\times\\text{central angle}",
+        latex: "= \\frac{1}{2}\\times\\text{central angle}",
       },
       {
         label: "Arc length (radians)",
-        formula: "= r\\theta",
+        latex: "= r\\theta",
       },
     ],
     example: {
@@ -251,27 +251,27 @@ $$180° = \\pi \\text{ radians}$$
     formulas: [
       {
         label: "Sine",
-        formula: "\\sin\\theta=\\frac{\\text{opp}}{\\text{hyp}}",
+        latex: "\\sin\\theta=\\frac{\\text{opp}}{\\text{hyp}}",
       },
       {
         label: "Cosine",
-        formula: "\\cos\\theta=\\frac{\\text{adj}}{\\text{hyp}}",
+        latex: "\\cos\\theta=\\frac{\\text{adj}}{\\text{hyp}}",
       },
       {
         label: "Tangent",
-        formula: "\\tan\\theta=\\frac{\\text{opp}}{\\text{adj}}",
+        latex: "\\tan\\theta=\\frac{\\text{opp}}{\\text{adj}}",
       },
       {
         label: "Pythagorean identity",
-        formula: "\\sin^2\\theta+\\cos^2\\theta=1",
+        latex: "\\sin^2\\theta+\\cos^2\\theta=1",
       },
       {
         label: "Complementary angles",
-        formula: "\\sin(\\theta)=\\cos(90°-\\theta)",
+        latex: "\\sin(\\theta)=\\cos(90°-\\theta)",
       },
       {
         label: "Degree to radian",
-        formula: "\\text{radians} = \\text{degrees}\\times\\frac{\\pi}{180}",
+        latex: "\\text{radians} = \\text{degrees}\\times\\frac{\\pi}{180}",
       },
     ],
     example: {

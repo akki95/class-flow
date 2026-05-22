@@ -53,15 +53,15 @@ For inequalities on the SAT, you may be asked which value satisfies the inequali
     formulas: [
       {
         label: "Linear equation",
-        formula: "ax + b = c \\implies x = \\frac{c - b}{a}",
+        latex: "ax + b = c \\implies x = \\frac{c - b}{a}",
       },
       {
         label: "Inequality — flip sign when dividing by negative",
-        formula: "\\text{if } -ax > b \\implies x < -\\frac{b}{a}",
+        latex: "\\text{if } -ax > b \\implies x < -\\frac{b}{a}",
       },
       {
         label: "Two-step word problem setup",
-        formula: "\\text{(rate)} \\times \\text{(quantity)} + \\text{(fixed)} = \\text{total}",
+        latex: "\\text{(rate)} \\times \\text{(quantity)} + \\text{(fixed)} = \\text{total}",
       },
     ],
 
@@ -163,19 +163,19 @@ $$\\frac{a_1}{a_2} = \\frac{b_1}{b_2} \\neq \\frac{c_1}{c_2}$$
     formulas: [
       {
         label: "Substitution — isolate one variable",
-        formula: "\\text{From } ax + by = c,\\ \\text{write } x = \\frac{c - by}{a}, \\text{ then substitute}",
+        latex: "\\text{From } ax + by = c,\\ \\text{write } x = \\frac{c - by}{a}, \\text{ then substitute}",
       },
       {
         label: "Elimination — match coefficients",
-        formula: "\\text{Multiply equations so coefficients match, then add/subtract to eliminate one variable}",
+        latex: "\\text{Multiply equations so coefficients match, then add/subtract to eliminate one variable}",
       },
       {
         label: "No solution condition",
-        formula: "\\frac{a_1}{a_2} = \\frac{b_1}{b_2} \\neq \\frac{c_1}{c_2}",
+        latex: "\\frac{a_1}{a_2} = \\frac{b_1}{b_2} \\neq \\frac{c_1}{c_2}",
       },
       {
         label: "Infinite solutions condition",
-        formula: "\\frac{a_1}{a_2} = \\frac{b_1}{b_2} = \\frac{c_1}{c_2}",
+        latex: "\\frac{a_1}{a_2} = \\frac{b_1}{b_2} = \\frac{c_1}{c_2}",
       },
     ],
 
@@ -283,23 +283,23 @@ $$m_1 \\times m_2 = -1 \\quad \\text{(e.g., slopes 3 and } -\\tfrac{1}{3}\\text{
     formulas: [
       {
         label: "Slope-intercept form",
-        formula: "y = mx + b",
+        latex: "y = mx + b",
       },
       {
         label: "Slope formula",
-        formula: "m = \\frac{y_2 - y_1}{x_2 - x_1}",
+        latex: "m = \\frac{y_2 - y_1}{x_2 - x_1}",
       },
       {
         label: "Point-slope form",
-        formula: "y - y_1 = m(x - x_1)",
+        latex: "y - y_1 = m(x - x_1)",
       },
       {
         label: "Perpendicular slopes",
-        formula: "m_1 \\times m_2 = -1",
+        latex: "m_1 \\times m_2 = -1",
       },
       {
         label: "x-intercept",
-        formula: "\\text{Set } y = 0 \\text{ and solve for } x",
+        latex: "\\text{Set } y = 0 \\text{ and solve for } x",
       },
     ],
 

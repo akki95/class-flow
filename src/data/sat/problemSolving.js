@@ -48,19 +48,19 @@ where $r$ is the decimal rate. A $20\\%$ increase gives $\\text{original} \\time
     formulas: [
       {
         label: "Proportion",
-        formula: "\\frac{a}{b}=\\frac{c}{d} \\Rightarrow ad=bc",
+        latex: "\\frac{a}{b}=\\frac{c}{d} \\Rightarrow ad=bc",
       },
       {
         label: "Percentage Change",
-        formula: "\\frac{\\text{new}-\\text{old}}{\\text{old}}\\times100\\%",
+        latex: "\\frac{\\text{new}-\\text{old}}{\\text{old}}\\times100\\%",
       },
       {
         label: "Markup / Markdown",
-        formula: "\\text{new}=\\text{original}\\times(1\\pm r)",
+        latex: "\\text{new}=\\text{original}\\times(1\\pm r)",
       },
       {
         label: "Ratio to fraction",
-        formula: "a:b \\Rightarrow \\frac{a}{a+b}\\text{ and }\\frac{b}{a+b}",
+        latex: "a:b \\Rightarrow \\frac{a}{a+b}\\text{ and }\\frac{b}{a+b}",
       },
     ],
     example: {
@@ -121,19 +121,19 @@ In a two-way table, the denominator becomes the row or column total that represe
     formulas: [
       {
         label: "Probability",
-        formula: "P = \\frac{\\text{favourable outcomes}}{\\text{total outcomes}}",
+        latex: "P = \\frac{\\text{favourable outcomes}}{\\text{total outcomes}}",
       },
       {
         label: "Relative Frequency",
-        formula: "= \\frac{f}{\\sum f}",
+        latex: "= \\frac{f}{\\sum f}",
       },
       {
         label: "Conditional Probability",
-        formula: "P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}",
+        latex: "P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}",
       },
       {
         label: "Complement Rule",
-        formula: "P(\\text{not } A) = 1 - P(A)",
+        latex: "P(\\text{not } A) = 1 - P(A)",
       },
     ],
     example: {
@@ -203,19 +203,19 @@ $$P(\\text{not red}) = 1 - P(\\text{red}) = 1 - \\frac{4}{12} = \\frac{8}{12} = 
     formulas: [
       {
         label: "Mean",
-        formula: "\\bar{x}=\\frac{\\sum x}{n}",
+        latex: "\\bar{x}=\\frac{\\sum x}{n}",
       },
       {
         label: "Median position",
-        formula: "\\text{position} = \\frac{n+1}{2}",
+        latex: "\\text{position} = \\frac{n+1}{2}",
       },
       {
         label: "Range",
-        formula: "\\text{range} = \\text{max} - \\text{min}",
+        latex: "\\text{range} = \\text{max} - \\text{min}",
       },
       {
         label: "Residual",
-        formula: "\\text{residual} = \\text{actual} - \\text{predicted}",
+        latex: "\\text{residual} = \\text{actual} - \\text{predicted}",
       },
     ],
     example: {
