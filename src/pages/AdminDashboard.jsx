@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { db, auth } from "../firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { auth } from "../firebase";
 import { createClient } from "@supabase/supabase-js";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
@@ -95,19 +94,12 @@ export default function AdminDashboard({ user }) {
   const [tab, setTab] = useState("Overview");
 
   // Data
-  const [sessions, setSessions]   = useState([]);
   const [attempts, setAttempts]   = useState([]);
   const [posts, setPosts]         = useState([]);
-  const [loaded, setLoaded]       = useState({ sessions: false, attempts: false, posts: false });
+  const [loaded, setLoaded]       = useState({ attempts: false, posts: false });
 
   // Hooks first
-  useEffect(() => { loadSessions(); loadAttempts(); loadPosts(); }, []); // eslint-disable-line
-
-  const loadSessions = async () => {
-    const snap = await getDocs(query(collection(db, "sessions"), orderBy("createdAt", "desc")));
-    setSessions(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    setLoaded(l => ({ ...l, sessions: true }));
-  };
+  useEffect(() => { loadAttempts(); loadPosts(); }, []); // eslint-disable-line
 
   const loadAttempts = async () => {
     const { data } = await supabaseAdmin
@@ -127,6 +119,8 @@ export default function AdminDashboard({ user }) {
     setPosts(data || []);
     setLoaded(l => ({ ...l, posts: true }));
   };
+
+  const sessions = []; // sessions removed — student-only platform
 
   // Access check after hooks
   if (!ADMIN_EMAILS.includes(user?.email)) {
@@ -155,8 +149,9 @@ export default function AdminDashboard({ user }) {
     { label: "1400+",    value: attempts.filter(a => { const s = parseInt(a.predicted_range); return s >= 1400; }).length },
   ];
 
-  const avgScore = attempts.filter(a => a.raw_score).length
-    ? Math.round(attempts.filter(a => a.raw_score).reduce((s, a) => s + a.raw_score, 0) / attempts.filter(a => a.raw_score).length * 100 / 12)
+  const scoredAttempts = attempts.filter(a => a.raw_score != null && a.raw_score >= 0);
+  const avgScore = scoredAttempts.length
+    ? Math.min(100, Math.round(scoredAttempts.reduce((s, a) => s + Math.min(a.raw_score, 12), 0) / scoredAttempts.length / 12 * 100))
     : 0;
 
   const thisWeek = attempts.filter(a => {
@@ -171,8 +166,8 @@ export default function AdminDashboard({ user }) {
   }).length;
 
   const diagTrend = lastWeek ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100) : null;
-  const activeSessions = sessions.filter(s => s.status === "active").length;
-  const uniqueTeachers = new Set(sessions.map(s => s.teacherId).filter(Boolean)).size;
+  const withReports = attempts.filter(a => a.predicted_range).length;
+  const publishedPosts = posts.filter(p => p.published).length;
 
   const s = {
     card: { background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px", marginBottom: 0 },
@@ -180,7 +175,7 @@ export default function AdminDashboard({ user }) {
     td: { padding: "11px 14px", fontSize: 13, color: T.text, borderBottom: `1px solid ${T.border}` },
   };
 
-  const isLoading = !loaded.sessions || !loaded.attempts || !loaded.posts;
+  const isLoading = !loaded.attempts || !loaded.posts;
 
   return (
     <div style={{ minHeight: "100vh", background: T.dark, fontFamily: "'Inter','Segoe UI',sans-serif" }}>
@@ -233,10 +228,10 @@ export default function AdminDashboard({ user }) {
           <>
             {/* Stat cards */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
-              <StatCard icon="📋" value={attempts.length}  label="Total Diagnostics" sub={`${thisWeek} this week`} color="#6366f1" trend={diagTrend} T={T} />
-              <StatCard icon="🎯" value={`${avgScore}%`}   label="Avg Score"         sub="across all attempts"   color="#1aa38a" T={T} />
-              <StatCard icon="📖" value={sessions.length}  label="Total Sessions"    sub={`${activeSessions} active now`} color="#f59e0b" T={T} />
-              <StatCard icon="✍️" value={posts.filter(p => p.published).length} label="Blog Posts" sub={`${posts.length} total`} color="#8b5cf6" T={T} />
+              <StatCard icon="📋" value={attempts.length}   label="Total Diagnostics"  sub={`${thisWeek} this week`}            color="#6366f1" trend={diagTrend} T={T} />
+              <StatCard icon="🎯" value={`${avgScore}%`}    label="Avg Accuracy"        sub="raw score / 12 questions"           color="#1aa38a" T={T} />
+              <StatCard icon="📄" value={withReports}        label="Reports Generated"   sub="with full AI analysis"              color="#f59e0b" T={T} />
+              <StatCard icon="✍️" value={publishedPosts}     label="Blog Posts Live"     sub={`${posts.length} total`}            color="#8b5cf6" T={T} />
             </div>
 
             {/* Charts row */}
@@ -298,23 +293,30 @@ export default function AdminDashboard({ user }) {
                 })}
               </div>
 
-              {/* Recent sessions */}
+              {/* Recent diagnostics */}
               <div style={{ ...s.card }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 14 }}>Recent Sessions</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>Recent Diagnostics</div>
+                  <button onClick={() => setTab("Diagnostics")} style={{ fontSize: 12, color: T.green, background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}>View all →</button>
+                </div>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead><tr>{["Session","Curriculum","Chapter","Status","Date"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
+                  <thead><tr>{["#","Score","Predicted","Ceiling","Date","Report"].map(h => <th key={h} style={s.th}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {sessions.slice(0, 8).map((sess, i) => (
+                    {attempts.slice(0, 8).map((a, i) => (
                       <tr key={i}>
-                        <td style={{ ...s.td, color: "#6366f1", fontWeight: 700, fontSize: 12 }}>{sess.id.slice(0, 8)}…</td>
-                        <td style={s.td}>{sess.curriculum?.toUpperCase() || "SAT"}</td>
-                        <td style={{ ...s.td, color: T.sub, fontSize: 12 }}>{sess.chapter || "—"}</td>
+                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>#{a.id}</td>
                         <td style={s.td}>
-                          <span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 700, background: sess.status === "ended" ? T.greenBg : "rgba(245,158,11,0.1)", color: sess.status === "ended" ? T.green : "#f59e0b" }}>
-                            {sess.status || "active"}
-                          </span>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ width: 36, height: 5, background: T.surface, borderRadius: 3, overflow: "hidden" }}>
+                              <div style={{ height: "100%", width: `${((a.raw_score || 0) / 12) * 100}%`, background: (a.raw_score || 0) >= 9 ? "#1aa38a" : (a.raw_score || 0) >= 6 ? "#f59e0b" : "#ef4444", borderRadius: 3 }} />
+                            </div>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{a.raw_score ?? "—"}/12</span>
+                          </div>
                         </td>
-                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{sess.createdAt?.toDate?.()?.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) || "—"}</td>
+                        <td style={{ ...s.td, fontWeight: 600, color: "#6366f1", fontSize: 12 }}>{a.predicted_range || "—"}</td>
+                        <td style={{ ...s.td, color: T.green, fontWeight: 600, fontSize: 12 }}>{a.score_ceiling || "—"}</td>
+                        <td style={{ ...s.td, color: T.muted, fontSize: 12 }}>{new Date(a.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</td>
+                        <td style={s.td}><Link to={`/diagnostic/report/${a.id}`} style={{ fontSize: 12, color: T.green, textDecoration: "none", fontWeight: 700 }}>View →</Link></td>
                       </tr>
                     ))}
                   </tbody>
@@ -420,10 +422,10 @@ export default function AdminDashboard({ user }) {
           <>
             {/* Computed metrics */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 20 }}>
-              <StatCard icon="📅" value={thisWeek}     label="Diagnostics This Week" color="#6366f1" trend={diagTrend} T={T} />
+              <StatCard icon="📅" value={thisWeek}      label="Diagnostics This Week" color="#6366f1" trend={diagTrend} T={T} />
               <StatCard icon="🏆" value={attempts.filter(a => parseInt(a.predicted_range) >= 1200).length} label="Scoring 1200+" color="#1aa38a" T={T} />
-              <StatCard icon="📖" value={sessions.filter(s => { const d = new Date(s.createdAt?.toDate?.()); return (new Date() - d) < 7*24*60*60*1000; }).length} label="Sessions This Week" color="#f59e0b" T={T} />
-              <StatCard icon="🌐" value={posts.filter(p => p.published).length} label="Live Blog Posts" color="#8b5cf6" T={T} />
+              <StatCard icon="📄" value={withReports}   label="Reports Generated"      color="#f59e0b" T={T} />
+              <StatCard icon="🌐" value={publishedPosts} label="Live Blog Posts"        color="#8b5cf6" T={T} />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
