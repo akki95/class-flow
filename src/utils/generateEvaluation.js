@@ -28,7 +28,7 @@ Key formulas:
 ${formulaText}
 
 Worked example from topic:
-Q: ${topic.example?.question || ""}
+Q: ${topic.example?.question || topic.example?.problem || ""}
 
 Generate 4 evaluation questions for this topic. Return ONLY valid JSON (no markdown, no explanation):
 
