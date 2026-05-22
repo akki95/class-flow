@@ -10,7 +10,7 @@ export async function generateEvaluation(topic) {
   if (!API_KEY) throw new Error("Gemini API key not configured.");
 
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
   const formulaText = topic.formulas
     ?.map(f => `${f.label}: ${f.latex}`)

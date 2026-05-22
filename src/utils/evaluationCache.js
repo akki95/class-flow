@@ -74,7 +74,7 @@ export async function getEvaluationQuestions(topic) {
       topicTitle: topic.title,
       questions,
       generatedAt: serverTimestamp(),
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash-lite",
     });
     console.log(`[eval] Saved to Firestore: ${topicId}`);
   } catch (err) {
@@ -109,7 +109,7 @@ export async function regenerateEvaluation(topic) {
       topicTitle: topic.title,
       questions,
       generatedAt: serverTimestamp(),
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash-lite",
       regenerated: true,
     });
   } catch {}
