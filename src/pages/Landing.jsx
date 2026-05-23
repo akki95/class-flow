@@ -24,6 +24,7 @@ const CURRICULA = [
     sub: "Take a free 15-minute diagnostic. Get a personalised AI report. Start studying what actually matters.",
     cta: "Take Free SAT Diagnostic →",
     link: "/diagnostic",
+    lessonsLink: "/sat",
     score: { current: "1180 – 1240", ceiling: "1470", unlockable: "+230 pts" },
   },
   {
@@ -34,6 +35,7 @@ const CURRICULA = [
     sub: "Pinpoint the exact topics holding you below an A*. Get a personalised report with a study plan.",
     cta: "Take Free IGCSE Diagnostic →",
     link: "/diagnostic/igcse",
+    lessonsLink: "/igcse/cambridge",
     score: { current: "Grade B", ceiling: "Grade A*", unlockable: "2 grades" },
   },
   {
@@ -44,7 +46,19 @@ const CURRICULA = [
     sub: "Identify weak topics across Pure, Statistics and Mechanics. Structured lessons built around your gaps.",
     cta: "Explore A-Level Lessons →",
     link: "/alevel",
+    lessonsLink: "/alevel",
     score: { current: "Grade C", ceiling: "Grade A", unlockable: "2 grades" },
+  },
+  {
+    id: "icse",
+    label: "ICSE",
+    color: "#e11d48",
+    headline: "Master ICSE Maths — Class 9 & 10",
+    sub: "GST, quadratics, circle theorems, trigonometric proofs, AP/GP and more. Topic-by-topic mastery with worked examples.",
+    cta: "Start ICSE Maths →",
+    link: "/icse",
+    lessonsLink: "/icse",
+    score: { current: "65–75%", ceiling: "95%+", unlockable: "+20–30%" },
   },
 ];
 
@@ -188,7 +202,7 @@ export default function Landing({ user }) {
               }}>
                 {curriculum.cta}
               </Link>
-              <Link to="/sat" style={{
+              <Link to={curriculum.lessonsLink} style={{
                 color: T.text, textDecoration: "none",
                 padding: "14px 28px", borderRadius: 10, fontSize: 16, fontWeight: 600,
                 border: `1px solid ${T.border}`, background: T.card,
